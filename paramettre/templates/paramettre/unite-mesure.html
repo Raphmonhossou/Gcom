@@ -1,0 +1,126 @@
+{% extends 'paramettre/base.html' %}
+{% load static %}
+
+
+{% block param %}
+
+<div class="cadre">
+
+    <div class="listeclient">
+
+        <div class="recentOrders">
+
+            <div class="cardHeader">
+                <h2>Unite de mesure({{nbr}})</h2>
+
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Recherche ici">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+
+                <form id="ajouterUniteForm">
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ajouterUniteModal">
+                        Ajouter
+                    </button>
+                </form>
+            </div>
+
+            <div class="scrol-table">
+                <table>
+                    <thead>
+                        <tr>
+
+                            <th scope="col">Libellé</th>
+                            <th scope="col">description</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        {% for unite in unite %}
+                        <tr>
+
+                            <td>{{unite.libele}}</td>
+                            <td>{{unite.description}}</td>
+
+                            <td>
+                                <div class="actions-dropdown">
+                                    <i class="fas fa-ellipsis-v dropdown-toggle" data-toggle="dropdown"></i>
+                                    <!-- <button class="dropdown-toggle" data-toggle="dropdown">Actions</button> -->
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="">Modifier</a>
+                                        <a class="dropdown-item" href="">Supprimer</a>
+                                    </div>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+<!-- le popup d'ajout de unite -->
+<div class="modal fade" id="ajouterUniteModal" tabindex="-1" role="dialog" aria-labelledby="ajouterUniteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ajouterUniteModalLabel">Ajouter une Unité</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--  formulaire d'ajout de contact  -->
+                <form action="{% url 'paramettre:unite-de-mesure' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        {{ form.libele }}
+
+                    </div>
+                    <div class="row mb-3">
+                        {{ form.description }}
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Valider</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ajouterContactForm = document.getElementById('ajouterUniteForm');
+        const closeButton = document.querySelector('#ajouterUniteModal .close');
+
+        ajouterContactForm.addEventListener('click', () => {
+            $('#ajouterUniteModal').modal('show');
+        });
+
+        closeButton.addEventListener('click', () => {
+            $('#ajouterUniteModal').modal('hide');
+        });
+    });
+
+</script>
+{% endblock %}

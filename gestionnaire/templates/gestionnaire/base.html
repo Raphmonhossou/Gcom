@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script> -->
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+
+     <script src="{% static 'gestionnaire/jquery-3.7.1.min.js' %}"></script>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="{% static 'gestionnaire/css/bootstrap.min.css' %}"> 
+     <link rel="stylesheet" href="{% static 'gestionnaire/style.css' %}">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script> 
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script> 
+     <script src="{% static 'gestionnaire/js/bootstrap.min.js' %}"></script> 
+     
+    
+</head>
+
+<body>
+
+    <!-- =============== Navigation ================ -->
+    <div class="containeur">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <img src="{% static 'gcom/img/logo.png' %}" alt="logo" width="50px" height="50px">
+                        </span>
+                        <span class="title">Gcom</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'gestionnaire:dashbord' %}">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                        <span class="title">Tableau de bord</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'contact:afficher-contact' %}">
+                        <span class="icon">
+                            <ion-icon name="people-outline"></ion-icon>
+                        </span>
+                        <span class="title">Contacts</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'gstock:liste-article' %}">
+                        <span class="icon">
+                            <ion-icon name="list-outline"></ion-icon>
+                        </span>
+                        <span class="title">Catalogue</span>
+                    </a>
+                </li>
+
+                
+                <li>
+                    <a href="{% url 'gstock:liste_commande_fournisseur' %}">
+                        <span class="icon">
+                            <ion-icon name="cart-outline"></ion-icon>
+                        </span>
+                        <span class="title">Achat</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <!-- {% url 'gstock:liste_commande_client' %} -->
+                        <span class="icon">
+                            <ion-icon name="cart-outline"></ion-icon>
+                        </span>
+                        <span class="title">Vente</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'gstock:stock' %}">
+                        <span class="icon">
+                            <ion-icon name="list-outline"></ion-icon>
+                        </span>
+                        <span class="title">Stock</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="cash-outline"></ion-icon>
+                        </span>
+                        <span class="title">Facturation</span>
+                    </a>
+                </li>
+
+                
+                <li>
+                    <a href="{% url 'paramettre:parametre' %}">
+                        <span class="icon">
+                            <i class="fas fa-cogs"></i>
+                        </span>
+                        <span class="title">Paramètre</span>
+                    </a>
+                </li>
+
+
+
+            </ul>
+        </div>
+
+        <!-- ========================= Main ==================== -->
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+
+                <div style="color: rgb(5, 244, 5);">
+                    {% block titre %} {% endblock %}
+                </div>
+
+
+                <div class="profil">
+                    <div>
+                        {% if user.is_authenticated %}
+                        {{user.username}}
+                        {% endif %}
+                    </div>
+                    <!-- 
+                    <div class="dropdown actions-dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            Action
+                            <span class="caret"></span>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Option 1</a></li>
+                                <li><a class="dropdown-item" href="#">Option 2</a></li>
+                                <li><a class="dropdown-item" href="#">Option 3</a></li>
+                            </ul>
+                        </button>
+
+                    </div> -->
+
+                    <!-- <div class="drop">
+                        <ul>
+                         <li>   
+                        <a href="">Action</a>
+                        
+                    </li>
+                    </ul>
+                    </div> -->
+
+                    <div class="dropdown">
+                        <button class="btn btn-primary"> Action</button>
+                        <div class="content">
+                            <li><a href="{% url 'usercompte:deconnexion' %}">Déconnexion</a></li>
+
+                        </div>
+
+                    </div>
+
+                    <div class="user">
+                        <img src="{% static 'gestionnaire/imgs/c1.jpg' %}" alt="Profil">
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            {% block content %}
+           
+        
+            {% endblock %}
+
+            {% block liste %}
+           
+        
+            {% endblock %}
+
+        </div>
+
+    </div>
+
+    <script src="{% static 'gestionnaire/main.js' %}"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+
+</body>
+
+</html>

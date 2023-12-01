@@ -1,0 +1,52 @@
+       
+  <div class="scrol-table">
+    {% if nombre is not None %}
+    {% if nombre == 0 %}
+        <p style="color: red;" >Aucun article trouvé</p>
+
+    {% else %}
+        {% if nombre == 1 %}
+              <p style="color: green;">{{ nombre}} article trouvé</p>
+
+        {% else %}
+               <p style="color: green;">{{ nombre }} articles trouvés</p>
+        {% endif %}
+    {% endif %}
+ {% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">code</th>
+                <th scope="col">Libellé</th>
+                <th scope="col">Famille</th>
+                <th scope="col">Prix HT</th>
+                <th scope="col">Prix TTC</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            {% for produit in produits %}
+            <tr>
+                <td>{{produit.code}}</td>
+                <td>{{produit.libele}}</td>
+                <td>{{produit.famille}}</td>
+                <td>{{produit.prix}}</td>
+                <td>{{prix_ht}}</td>
+                <td>
+                   <div class="btn-action">
+                    <a class="dropdown-item" href="{% url 'stock:recuperer-article' produit.id %}">Modifier</a>
+                    <a class="dropdown-item" href="{% url 'stock:supprimer-article' produit.id %}">Supprimer</a>
+                  </div>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>      

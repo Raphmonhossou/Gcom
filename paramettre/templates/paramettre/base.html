@@ -1,0 +1,32 @@
+{% extends 'gestionnaire/base.html' %}
+{% load static %}
+
+{% block titre %}
+<h1>Paramètre de l'application</h1>
+{% endblock %}
+
+{% block content %}
+
+ <div class="menu-param ">
+    <div class="menu-titre text-center"> 
+        <h3>Menu</h3>
+    </div>
+   <div class="nav-menu-param">
+    <ul>
+
+    <li class="nav-link"><a class="nav-link" href="{% url 'paramettre:famille-de-produit' %}">Famille de produit</a></li>
+    <li class="nav-link"> <a class="nav-link" href="{% url 'paramettre:unite-de-mesure' %}" >Unité de mesure</a></li>
+    <li class="nav-link"><a class="nav-link" href="{% url 'paramettre:groupe-de-taxe' %}"  >Groupe de taxe</a></li>
+    <li class="nav-link"><a class="nav-link" href="#"  >Utilisateurs</a></li>
+
+   </ul>
+ </div>
+</div>
+
+{% endblock %}
+
+{% block liste %}
+ {% block param %}
+
+ {% endblock %}
+{% endblock %}

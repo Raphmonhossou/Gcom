@@ -1,0 +1,133 @@
+{% extends 'paramettre/base.html' %}
+{% load static %}
+
+
+{% block param %}
+
+<div class="cadre">
+
+    <div class="listeclient">
+
+        <div class="recentOrders">
+
+            <div class="cardHeader">
+                <h2>Famille de produit({{nbr}})</h2>
+                <h5>
+                    {% if ajouter_reussi %}
+                    <div id="messageConfirmation" class="alert alert-success">
+                        Groupe de famille ajouté avec succès!
+                    </div>
+                    {% endif %}
+                </h5>
+
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Recherche ici">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+
+                <form id="ajouterFamilleForm">
+                    <button class="btn btn-primary" type="button" data-toggle="modal"
+                        data-target="#ajouterFamilleModal">
+                        Ajouter
+                    </button>
+                </form>
+            </div>
+
+            <div class="scrol-table">
+                <table>
+                    <thead>
+                        <tr>
+
+                            <th scope="col">libellé</th>
+                            <th scope="col">description</th>
+
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        {% for famille in famille %}
+                        <tr>
+
+                            <td>{{famille.libele}}</td>
+                            <td>{{famille.description}}</td>
+
+                            <td>
+                                <div class="actions-dropdown">
+                                    <i class="fas fa-ellipsis-v dropdown-toggle" data-toggle="dropdown"></i>
+                                    <!-- <button class="dropdown-toggle" data-toggle="dropdown">Actions</button> -->
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="">Modifier</a>
+                                        <a class="dropdown-item" href="">Supprimer</a>
+                                    </div>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+<!-- le popup d'ajout de famille -->
+<div class="modal fade" id="ajouterFamilleModal" tabindex="-1" role="dialog" aria-labelledby="ajouterFamilleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ajouterFamilleModalLabel">Ajouter une famille</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--  formulaire d'ajout de contact  -->
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="row mb-3">
+                        {{ form.libele }}
+                    </div>
+                    <div class="row mb-3">
+                        {{ form.description }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Valider</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ajouterFamilleForm = document.getElementById('ajouterFamilleForm');
+        const closeButton = document.querySelector('#ajouterFamilleModal .close');
+
+        ajouterFamilleForm.addEventListener('click', () => {
+            $('#ajouterFamilleModal').modal('show');
+        });
+
+        closeButton.addEventListener('click', () => {
+            $('#ajouterFamilleModal').modal('hide');
+        });
+    });
+
+</script>
+{% endblock %}

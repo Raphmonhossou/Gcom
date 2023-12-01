@@ -1,0 +1,56 @@
+<div class="scrol-table">
+    {% if nombre is not None %}
+    {% if nombre == 0 %}
+        <p style="color: red;" >Aucune société trouvée</p>
+
+    {% else %}
+        {% if nombre == 1 %}
+              <p style="color: green;">{{ nombre}} société trouvée</p>
+
+        {% else %}
+               <p style="color: green;">{{ nombre }} sociétés trouvées</p>
+        {% endif %}
+    {% endif %}
+ {% endif %}
+    <table >
+        <thead>
+            <tr>
+                
+                <th scope="col">Nom</th>
+                <th scope="col">Email</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">Ifu</th>
+                <th scope="col">Catégorie</th>
+                <th scope="col">Type</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            {% for contact in contacts_societes %}
+            <tr>
+                
+                <td>{{contact.name}}</td>
+                <td>{{contact.email}}</td>
+                <td>{{contact.phone}}</td>
+                <td>{{contact.ifu}}</td>
+                <td>{{contact.categorie}}</td>
+                <td>{{contact.type}}</td>
+                <td>{{contact.adress}}</td>
+                <td>
+                  
+                    <a class="dropdown-item" href="{% url 'contact:recuperer-contact' contact.id %}?calling_page={{ request.path }}">Modifier</a>
+                    <a class="dropdown-item" href="{% url 'contact:supprimer-contact' contact.id %}?calling_page={{ request.path }}">Supprimer</a>
+
+                </td>
+               
+            </tr>
+           
+            {% endfor %}
+         
+          
+        </tbody>
+      </table>
+</div>

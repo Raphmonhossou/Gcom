@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G_com</title>
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> 
+    <link rel="stylesheet"  href="{% static 'gcom/css/bootstrap.min.css' %}"> 
+    <link rel="stylesheet" href="{% static 'gcom/stylegcom.css' %}">
+    
+</head>
+<body>
+
+<nav class="cc-navbar navbar navbar-expand-lg w-100">
+    <div class="container-fluid">
+      <a class="navbar-brand mx-3 py-1" href="{% url 'gcom:index' %}">
+       <img src="{% static 'gcom/img/logo.png' %}" alt="logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse  navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav  ms-auto mb-2 mb-lg-0 text-right text-light ">
+          <li class="nav-item pe-4">
+            <a class="nav-link text-light" aria-current="page" href="{% url 'gcom:index' %}">Accueil</a>
+          </li>
+          <li class="nav-item pe-4 ">
+            <a class="nav-link text-light" href="{% url 'gcom:fonctionalite' %}">Fonctionalités</a>
+          </li>
+          <li class="nav-item pe-4">
+            <a class="nav-link text-light" href="{% url 'gcom:temoignage' %}">Témoignages</a>
+          </li>
+          <li class="nav-item pe-4">
+            <a class="nav-link text-light" href="{% url 'gcom:apropos' %}">A propos</a>
+          </li>
+          <li class="nav-item pe-5">
+            <a class="btn btn-primary btn-connexion" href="{% url 'usercompte:connexion' %}">Connexion</a>
+        </li>
+       
+        </ul>
+        
+      </div>
+    </div>
+  </nav> 
+
+  {% block content %}
+
+  {% endblock %}
+
+
+<!-- footer -->
+<section class=" py-5 footer " >
+    <div class="container">
+        <div class="row">
+  
+        <div class="col-md-3 sm">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link text-light" href="https://digitalis-benin.com/">Digitalis</a>
+            </li>
+            
+           
+          </ul>
+        </div>
+  
+        <div class="col-md-3 sm">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link text-light" href="#">Activités</a>
+            </li>
+           
+           
+          </ul>
+        </div>
+
+        <div class="col-md-3 sm">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link text-light" href="#">Nos service</a>
+            </li>
+          
+           
+          </ul>
+        </div>
+
+        <div class="col-md-3 sm">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link text-light" href="#">Partenaires</a>
+            </li>
+          
+           
+          </ul>
+        </div>
+
+    </div>
+     <h6 class="text-center text-light pt-5">© Copyright Digitalis. Tous droits réservés</h6>
+    </div>
+  </section>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="{% static 'gcom/js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>

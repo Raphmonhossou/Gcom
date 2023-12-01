@@ -1,0 +1,384 @@
+{% extends 'gestionnaire/base.html' %}
+{% load static %}
+
+{% block titre %}
+<h1>Gestion commerciale</h1>
+{% endblock %}
+
+{% block content %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<div class="listeclient">
+
+    <div class="recentOrders">
+
+        <div class="cardHeader">
+            <h2>Articles({{nbr}})</h2>
+            <h5>
+                {% if ajout_reussi %}
+                <div id="messageConfirmation" class="alert alert-success">
+                    Article ajouté!
+                </div>
+                {% endif %}
+
+                {% if modification_reussi %}
+                <div id="messageConfirmation" class="alert alert-success">
+                    Article modifié!
+                </div>
+                {% endif %}
+            </h5>
+            <div class="search">
+                <label>
+                    <input type="text" id="champ_recherche" placeholder="Recherche ici">
+                    <ion-icon name="search-outline"></ion-icon>
+                </label>
+            </div>
+            
+            <div class="decon">
+                <form id="ajouterArticleForm">
+                    <button class="btn btn-primary" type="button" data-toggle="modal"
+                        data-target="#ajouterArticleModal">
+                        Ajouter un article
+                    </button>
+                </form>
+
+
+            </div>
+        </div>
+
+        <!-- inclure la table contenant la liste des contacts cest aussi le coneteur des resultats de recherche-->
+        <div id="resultats_recherche">
+            {% include 'gstock/recherche_article.html' %}
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="decon">
+    <!-- le popup d'ajout de produit -->
+    <div class="modal fade" id="ajouterArticleModal" tabindex="-1" role="dialog"
+        aria-labelledby="ajouterArticleModalLabel" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ajouterArticleModalLabel">Ajouter un article</h5>
+                    <span style="color: red;">
+                        <h4>{{reponse}}</h4>
+                    </span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--  formulaire d'ajout de article  -->
+                    <form method="post" action="{% url 'gstock:ajouter-article' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            {{ form.libele }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.code }}
+
+                        </div>
+                        <div class="mb-3">
+                            {{ form.description }}
+
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.prix }}
+
+                        </div>
+                        
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">  {{ form.fournisseur.label_tag }} </div>
+                            {{ form.fournisseur }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.quantite }}
+
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.niveau_alerte_stock }}
+
+                        </div>
+                        <div class="mb-3">
+                            {{ form.cout_achat }}
+
+                        </div>
+
+                        
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">  {{ form.unite_mesure.label_tag }} </div>
+                            {{ form.unite_mesure }}
+                        </div>
+                      
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text"> {{ form.groupe_taxe.label_tag }} </div>
+                            {{ form.groupe_taxe }}
+                        </div>
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">  {{ form.date_peremption.label_tag }} </div>
+                            {{ form.date_peremption }}
+                        </div>
+
+                        <div class="mb-3">
+                           
+
+                        </div>
+
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">{{ form.famille.label_tag }} </div>
+                            {{ form.famille }}
+                        </div>
+
+
+                        <div class="mb-3">
+                            {{ form.image }}
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary">Valider</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="decon">
+    <!-- le popup d'ajout de produit -->
+    <div class="modal fade" id="modifierArticleModal" tabindex="-1" role="dialog"
+        aria-labelledby="modifierArticleModalLabel" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modifierArticleModalLabel">Modifier l'article</h5>
+                    <span style="color: red;">
+                        <h4>{{reponse}}</h4>
+                    </span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--  formulaire d'ajout de article  -->
+                    <form method="post" action="{% url 'stock:modifier-article' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="article_id" id="article_id" value="{{ form.instance.id }}">
+
+                        <div class="mb-3">
+                            {{ form.libele }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.code }}
+
+                        </div>
+                        <div class="mb-3">
+                            {{ form.description }}
+
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.prix }}
+
+                        </div>
+                        
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">  {{ form.fournisseur.label_tag }} </div>
+                            {{ form.fournisseur }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.quantite }}
+
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.niveau_alerte_stock }}
+
+                        </div>
+                        <div class="mb-3">
+                            {{ form.cout_achat }}
+
+                        </div>
+
+                        
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">  {{ form.unite_mesure.label_label_tag }} </div>
+                            {{ form.unite_mesure }}
+                        </div>
+                      
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text"> {{ form.groupe_taxe.label_tag }} </div>
+                            {{ form.groupe_taxe }}
+                        </div>
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">  {{ form.date_peremption.label_tag }} </div>
+                            {{ form.date_peremption }}
+                        </div>
+
+                        <div class="mb-3">
+                           
+
+                        </div>
+
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">{{ form.famille.label_tag }} </div>
+                            {{ form.famille }}
+                        </div>
+
+
+                        <div class="mb-3">
+                            {{ form.image }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Modifier</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- evenement de clic sur bouton pour declencher l'affichage de modal, fermer le modal avec close -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ajouterArticleForm = document.getElementById('ajouterArticleForm');
+        const closeButton = document.querySelector('#ajouterArticleModal .close');
+        const closeButton1 = document.querySelector('#modifierArticleModal .close');
+
+        ajouterArticleForm.addEventListener('click', () => {
+            $('#ajouterArticleModal').modal('show');
+        });
+
+        closeButton.addEventListener('click', () => {
+            $('#ajouterArticleModal').modal('hide');
+        });
+        closeButton1.addEventListener('click', () => {
+            $('#modifierArticleModal').modal('hide');
+        });
+
+    });
+
+</script>
+
+
+
+
+               
+ 
+
+
+<!-- recuperer la valeur booleen envoyé depuis la vue pour declencher ou non l'affichage de popup -->
+<input type="hidden" id="afficherModal" value="{{ afficherModal }}">
+<input type="hidden" id="afficherModalModification" value="{{ afficherModalModification }}">
+
+
+<!-- declencher l'affichage du modal  d'ajout article  si afficherModal(si y a echec de modification de l'article, on reaffiche le modal avec message d'erreur) est vrai -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var afficherModal = document.getElementById('afficherModal').value;
+
+        // Récupérez le modal
+        var modal = document.getElementById('ajouterArticleModal');
+
+        // Assurez-vous que la valeur de afficherModal est "True" (chaine de caractères) ou évaluée à true
+        if (afficherModal && (afficherModal.toLowerCase() === 'true' || afficherModal === true)) {
+            // Assurez-vous que Bootstrap est chargé (si vous utilisez Bootstrap)
+            if (typeof $().modal === 'function') {
+                // Utilisez Bootstrap pour afficher le modal
+                $(modal).modal('show');
+                
+            } else {
+                // Si Bootstrap n'est pas disponible, vous pouvez simplement afficher le modal
+                modal.style.display = 'block';
+            }
+        }
+    });
+
+
+</script>
+
+<!-- declencher l'affichage du modal de modification d'article  si afficherModalModification est vrai(si y a echec de modification de l'article, on reaffiche le modal avec message d'erreur) est vrai -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var afficherModalModification = document.getElementById('afficherModalModification').value;
+
+        // Récupérez le modal
+        var modal = document.getElementById('modifierArticleModal');
+
+        if (afficherModalModification && (afficherModalModification.toLowerCase() === 'true' || afficherModalModification === true)) {
+            // Assurez que Bootstrap est chargé (si vous utilisez Bootstrap)
+            if (typeof $().modal === 'function') {
+                // Utilisez Bootstrap pour afficher le modal
+                $(modal).modal('show');
+            } else {
+                // Si Bootstrap n'est pas disponible,  simplement afficher le modal
+                modal.style.display = 'block';
+            }
+        }
+    });
+
+
+</script>
+
+<script>
+    // Activer la liste déroulante avec jQuery
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown();
+    });
+</script>
+
+
+<script>
+    // Fonction pour déclencher la recherche à mesure que l'utilisateur tape
+    $('#champ_recherche').on('input', function () {
+        var termeRecherche = $(this).val();
+
+        // Effectuer une requête AJAX pour récupérer les résultats de la recherche
+        $.ajax({
+            url: '{% url "gstock:recherche_article" %}',
+            data: { 'term_recherche': termeRecherche },
+            dataType: 'html',
+            success: function (data) {
+                // Mettre à jour le conteneur des résultats avec les nouveaux résultats
+                $('#resultats_recherche').html(data);
+            }
+        });
+    });
+</script>
+
+
+<script>
+    // Fonction qui supprime le message de confirmation
+    function supprimerMessage() {
+        // document.getElementById("messageConfirmation").remove();
+        document.getElementById("messageConfirmation").fadeOut(3000);
+    }
+
+    // Définir un délai de 3 secondes avant l'exécution de la fonction
+    setTimeout(supprimerMessage, 3000);
+</script>
+<!-- <script>
+    // Définir un délai de 3 secondes avant de réduire l'opacité du message de confirmation à 0
+    setTimeout(function() {
+        document.getElementById("messageConfirmation").style.opacity = 0;
+    }, 3000);
+</script> -->
+
+
+{% endblock %}

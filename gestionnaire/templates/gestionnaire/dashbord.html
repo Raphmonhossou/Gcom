@@ -1,0 +1,52 @@
+{% extends 'gestionnaire/base.html' %}
+{% load static %}
+
+{% block titre %}
+<h1>Gestion commerciale</h1>
+{% endblock %}
+
+{% block content %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+<div class="cardBox">
+    <div class="card">
+        <div class="cardName"> Mes taches</div>
+        <div>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <div class="cardName"> Mon agenda</div>
+        <div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="cardBox">
+    <div class="card">
+        <div class="cardName"> CA</div>
+        <div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+        <div class="cardName"> </div>
+        <div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+{% endblock %}

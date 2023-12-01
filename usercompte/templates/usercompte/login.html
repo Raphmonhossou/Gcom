@@ -1,0 +1,49 @@
+{% extends 'usercompte/base.html' %}
+{% load static %}
+
+{% block content %}
+
+ <div class="cc-connexion ">
+    <h1 class="text-center text-light  pt-5 ">Connexion</h1>
+    <a class=" nav-link text-light" href="{% url 'gcom:index' %}">Retour au site</a>
+   <div class="bloc-connexion text-center">
+    
+        <img class=" text-light bloc-connexion-img" src="{% static 'usercompte/img/user5.jpg' %}" height="100px" width="100px" alt="image">
+        <div class=" message-erreur text-light"> {{message}} </div>
+        
+        <form method="POST"  action="{% url 'usercompte:connexion' %}" > 
+            {% csrf_token %}
+            
+          <div class="row px-5">
+            <div class="col-md-15 sm ">
+                <div class="input-group mb-3">
+                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i> </span>
+                     <input id="username" type="text" name="username"  class="form-control" placeholder="Username">
+                </div>
+
+               <!-- <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-at"></i> </span>
+                 <input id="email" type="email" name="email"  class="form-control" placeholder="Email">
+              </div> -->
+
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-at fa-key"></i> </span>
+                <input id="password" type="password" name="password"class="form-control" placeholder="********">
+             </div>
+
+             <div class="mt-5"></div>
+               <button class="btn-form text-light" type="submit"> Connexion</button>
+               <a class=" nav-link mt-2 text-light" href="{% url 'usercompte:inscription' %}">Créer un compte</a>
+              </div>
+
+           </div>
+        </div>
+        </form>
+    </div>
+</div>
+    
+      
+    
+
+
+{% endblock %}

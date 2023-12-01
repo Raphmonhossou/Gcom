@@ -1,0 +1,54 @@
+<div class="scrol-table">
+    {% if nombre is not None %}
+    {% if nombre == 0 %}
+        <p style="color: red;" >Aucune commande trouvée</p>
+
+    {% else %}
+        {% if nombre == 1 %}
+              <p style="color: green;">{{ nombre}} commande trouvée</p>
+
+        {% else %}
+               <p style="color: green;">{{ nombre }} commandes trouvées</p>
+        {% endif %}
+    {% endif %}
+ {% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Reférence</th>
+                <th scope="col">Client</th>
+                <th scope="col">Montant TTC</th>
+                <th scope="col">Statut</th>
+                <th scope="col">Date de livraison</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            {% for commande in commande_clients %}
+            <tr>
+                <td>{{commande.date_commande}}</td>
+                <td>{{commande.reference}}</td>
+                <td>{{commande.fournisseur}}</td>
+                <td>{{commande.montant}}</td>
+                <td>{{commande.statut}}</td>
+                <td>{{commande.date_reception}}</td>
+                <td>
+                    <div class="btn-action">
+                        <a class="dropdown-item" href="{% url 'stock:update_commande_client' commande.id %}">Modifier</a>
+                        <a class="dropdown-item" href="{% url 'gstock:delete-commande-client' commande.id %}">Supprimer</a>
+                      
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>

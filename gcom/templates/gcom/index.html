@@ -1,0 +1,161 @@
+{% extends 'gcom/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<section class="banner d-flex justify-content-center aligne-items-center pt-5">
+<div class="container  my-5 py-5">
+<div class="row">
+   <div class="col-md-16 mb-5">
+   <h1 class="text-capitalize text-center py-3  banner-desc">
+    Gestion commerciale
+  </h1>
+  </div>
+  <div class="col-md-6">
+   <h1 class="py-3  banner-desc">
+    La solution de gestion commerciale adaptée à vos besoins.
+  </h1>
+  </div>
+  <div class="col-md-6">
+    <h1 class="py-3  banner-desc">
+      L'application qui gère votre société en toute tranquilité
+    </h1>
+  </div>
+</div>
+</div>
+</section>
+
+
+
+<section class="cc-video py-2 mx-5">
+  <div class="container">
+      <div class="row">
+     
+        <div class="card my-5 border-0 rounded-0 card-video"  >
+          <div class="row"> 
+              <div class="col-md-6 comment-video">
+                  <div class="card-body ">
+                      <p class="card-text "> Regardez cette video pour tout savoir sur l'application
+                        <img src="{% static 'gcom/img/image21.png' %}" alt="">
+                      </p>
+                      
+                  </div>
+              </div>
+              <div class="col-md-6 border-0 video">
+                <video width="560" height="300" controls autoplay muted loop>
+                  <source src="{% static 'gcom/video/ia.mp4' %}" type="video/mp4">
+                  <source src="{% static 'gcom/video/ia.mp4' %}" type="video/webm">
+                  Votre navigateur ne supporte pas la lecture de vidéos.
+                </video>
+              </div>
+          </div>
+      </div>
+
+      </div>
+  </div>
+</section>
+
+<section class="presentation-app mx-5 py-5">
+  <h3 class="text-center ">Pourquoi Gcom ?</h3>
+  <div class="container">
+    <div class="row merriweather presentation-desc">
+      
+        <div class="col-md-18 mb-5">
+      <p>G est votre solution tout-en-un pour simplifier la gestion de votre entreprise.
+        Nous comprenons les défis auxquels les entreprises sont confrontées au quotidien,
+        c'est pourquoi nous avons créé une application conçue pour améliorer votre efficacité, optimiser vos opérations et stimuler votre croissance.
+        En utilisant notre application de gestion commerciale, vous libérez votre temps pour ce qui compte vraiment : développer votre entreprise et offrir des produits ou des services exceptionnels à vos clients. Optez pour la simplicité, l'efficacité et la croissance avec notre solution de gestion commerciale. Rejoignez-nous dès aujourd'hui et découvrez la différence qu'elle peut apporter à votre entreprise.
+        Notre application est conçue pour vous, pour aider votre entreprise à prospérer.</p>
+        Notre application couvre l'ensemble du processus de gestion commerciale, de la gestion
+        des produits et des ventes à la comptabilité et aux rapports. Plus besoin de jongler
+        entre plusieurs outils.</p>
+      </div>
+    </div>
+    
+      
+
+    <div class="row merriweather presentation-desc">
+
+      <div class="col-md-5 py-5 ">
+        <h3 class="text-center   banner-desc"><i class="fas fa-tasks mx-5"></i>  Gestion Complète</h3>
+        <p> Notre application couvre l'ensemble du processus de gestion commerciale,
+          de la gestion des produits et des ventes à la comptabilité et aux rapports. Plus besoin de jongler entre plusieurs outils.</p>
+      </div>
+
+      <div class="col-md-5 py-5 ">
+      <h3 class="text-center   banner-desc"> <i class="fas fa-smile mx-5"></i>Facilité d'Utilisation</h3>
+      <p> Notre interface conviviale est conçue pour que tout le monde puisse 
+        l'utiliser, des propriétaires de petites entreprises aux gestionnaires
+        expérimentés. Vous n'avez pas besoin d'être un expert en informatique
+          pour tirer parti de notre application.</p>
+      </div>
+
+   <div class="col-md-5 py-5">
+
+    <h3 class="text-center  banner-desc"><i class="fas fa-clock"></i>  Gain de Temps</h3>
+    <p> Avec des fonctionnalités automatisées telles que la génération de devis, 
+      de factures et le suivi des paiements, vous économiserez un temps précieux. 
+      Vous pourrez vous concentrer sur ce qui compte vraiment : développer votre entreprise.
+     </p>
+    </div>
+    <div class="col-md-5 py-5">
+      <h3 class="text-center  banner-desc"> <i class="fas fa-money-bill-wave mx-5"></i> Surveillez votre trésorerie</h3>
+      <p>    Lorsque vous avez vos revenus et vos dépenses sous vos yeux,
+         il vous est beaucoup plus facile de savoir comment planifier vos finances.
+       </p>
+      </div>
+
+  </div>
+
+
+   
+  </div>
+</section>
+
+
+
+
+
+<section class="cc-carossel merriweather text-light text-center py-5 mx-5">
+  <div class="container">
+    <div class="row">
+    
+      <div id="carouselExampleCaptions" class="carousel slide">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{% static 'gcom/img/image5.png' %}" class="d-block w-100" alt="...">
+            
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'gcom/img/image6.png' %}" class="d-block w-100" alt="...">
+            
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'gcom/img/image7.png' %}" class="d-block w-100" alt="...">
+            
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}
+

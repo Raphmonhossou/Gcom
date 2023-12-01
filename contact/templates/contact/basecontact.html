@@ -1,0 +1,272 @@
+{% extends 'gestionnaire/base.html' %}
+{% load static %}
+
+
+{% block titre %}
+<h1>Gestion commerciale</h1>
+{% endblock %}
+{% block content %}
+
+
+<div class="bar-contact">
+    <div class="nav-contact">
+        <div class="decon">
+        <a class="nav-link nav-link-contact" href="{% url 'contact:afficher-contact' %}">Contacts</a>
+        </div>
+        <div class="decon">
+            <a class="nav-link" href="{% url 'contact:liste-client' %}">Clients</a>
+        </div>
+
+        <div class="decon">
+            <a class="nav-link" href="{% url 'contact:liste-prospect' %}">Prospects</a>
+        </div>
+        <div class="decon">
+            <a class="nav-link" href="{% url 'contact:liste-fournisseur' %}">Founisseurs</a>
+        </div>
+
+        <div class="decon">
+            <a class="nav-link" href="{% url 'contact:liste-societe' %}">Sociétés</a>
+        </div>
+
+        <div class="decon">
+            <a class="nav-link" href="{% url 'contact:liste-particulier' %}">Particuliers</a>
+        </div>
+        <div class="decon">
+
+            <form id="ajouterContactForm">
+                <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ajouterContactModal">
+                    Ajouter
+                </button>
+            </form>
+
+
+
+            <!-- le popup d'ajout de contact -->
+            <div class="modal fade" id="ajouterContactModal" tabindex="-1" role="dialog"
+                aria-labelledby="ajouterContactModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ajouterContactModalLabel">Ajouter un contact</h5>
+                            <span style="color: red;">
+                                <h4>{{reponse}}</h4>
+                            </span>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!--  formulaire d'ajout de contact  -->
+                            <form method="post" action="{% url 'contact:ajouter-contact' %}?calling_page={{ request.path }}">
+                                {% csrf_token %}
+
+                                <div class="mb-3">
+                                    {{ form.name }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.email }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.phone }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.ifu }}
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"> {{ form.categorie.label }}</span>
+                                    {{ form.categorie }}
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"> {{ form.type.label }}</span>
+                                    {{ form.type }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.adress }}
+                                </div>
+                                <button type="submit" class="btn btn-primary">Valider</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- le popup de modification de contact -->
+        <div class="modal fade" id="modifierContactModal" tabindex="-1" role="dialog"
+            aria-labelledby="modifierContactModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modifierContactModalLabel">Modifier le contact</h5>
+                        <span style="color: red;">
+                            <h4>{{reponse}}</h4>
+                        </span>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <form method="post" action="{% url 'contact:modifier-contact' %}?calling_page={{ calling_page }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="contact_id" id="contact_id" value="{{ form.instance.id }}">
+
+                            <div class="mb-3">
+                                {{ form.name }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.email }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.phone }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.ifu }}
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"> {{ form.categorie.label }}</span>
+                                {{ form.categorie }}
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"> {{ form.type.label }}</span>
+                                {{ form.type }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.adress }}
+                            </div>
+
+
+                            <!-- <fieldset class="row mb-3">
+                                <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
+                                <div class="col-sm-10">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                                    <label class="form-check-label" for="gridRadios1">
+                                        {{ form.categorie }}
+                                    </label>
+                                  </div>
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                    <label class="form-check-label" for="gridRadios2">
+                                      Second radio
+                                    </label>
+                                  </div>
+                                  <div class="form-check disabled">
+                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
+                                    <label class="form-check-label" for="gridRadios3">
+                                      Third disabled radio
+                                    </label>
+                                  </div>
+                                </div>
+                              </fieldset> -->
+
+
+                            <button type="submit" class="btn btn-primary">Modifier</button>
+                        </form>
+
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- evenement de clic sur bouton pour declencher l'affichage de modal, fermer le modal avec close -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ajouterContactForm = document.getElementById('ajouterContactForm');
+        const closeButton = document.querySelector('#ajouterContactModal .close');
+        const closeButton1 = document.querySelector('#modifierContactModal .close');
+
+        ajouterContactForm.addEventListener('click', () => {
+            $('#ajouterContactModal').modal('show');
+        });
+
+        closeButton.addEventListener('click', () => {
+            $('#ajouterContactModal').modal('hide');
+        });
+
+        closeButton1.addEventListener('click', () => {
+            $('#modifierContactModal').modal('hide');
+        });
+    });
+
+</script>
+
+               
+ 
+
+
+<!-- recuperer la valeur booleen envoyé depuis la vue pour declencher ou non l'affichage de popup -->
+<input type="hidden" id="afficherModal" value="{{ afficherModal }}">
+<input type="hidden" id="afficherModalModification" value="{{ afficherModalModification }}">
+
+
+<!-- affichage modal  d'ajout contact  si une boolean est vrai -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var afficherModal = document.getElementById('afficherModal').value;
+
+        // Récupérez le modal
+        var modal = document.getElementById('ajouterContactModal');
+
+        // Assurez-vous que la valeur de afficherModal est "True" (chaine de caractères) ou évaluée à true
+        if (afficherModal && (afficherModal.toLowerCase() === 'true' || afficherModal === true)) {
+            // Assurez-vous que Bootstrap est chargé (si vous utilisez Bootstrap)
+            if (typeof $().modal === 'function') {
+                // Utilisez Bootstrap pour afficher le modal
+                $(modal).modal('show');
+                
+            } else {
+                // Si Bootstrap n'est pas disponible, vous pouvez simplement afficher le modal
+                modal.style.display = 'block';
+            }
+        }
+    });
+
+
+</script>
+
+<!-- affichage de popup modification si vrai -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var afficherModalModification = document.getElementById('afficherModalModification').value;
+
+        // Récupérez le modal
+        var modal = document.getElementById('modifierContactModal');
+
+        if (afficherModalModification && (afficherModalModification.toLowerCase() === 'true' || afficherModalModification === true)) {
+            // Assurez que Bootstrap est chargé (si vous utilisez Bootstrap)
+            if (typeof $().modal === 'function') {
+                // Utilisez Bootstrap pour afficher le modal
+                $(modal).modal('show');
+            } else {
+                // Si Bootstrap n'est pas disponible,  simplement afficher le modal
+                modal.style.display = 'block';
+            }
+        }
+    });
+
+
+</script>
+
+<script>
+    // Activer la liste déroulante avec jQuery
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown();
+    });
+</script>
+
+{% endblock %}
+
+{% block liste %}
+{% block contact %}
+
+{% endblock %}
+{% endblock %}

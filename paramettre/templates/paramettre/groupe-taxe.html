@@ -1,0 +1,150 @@
+{% extends 'paramettre/base.html' %}
+{% load static %}
+
+
+{% block param %}
+
+<div class="cadre">
+
+    <div class="listeclient">
+
+        <div class="recentOrders">
+
+            <div class="cardHeader">
+                <h2>Groupe de Taxe({{nbr}})</h2>
+
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Recherche ici">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+
+                <form id="ajouterTaxeForm">
+                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ajouterTaxeModal">
+                        Ajouter
+                    </button>
+                </form>
+            </div>
+
+            <div class="scrol-table">
+                <table>
+                    <thead>
+                        <tr>
+
+                            <th scope="col">Libellé</th>
+                            <th scope="col">Taux</th>
+                            <th scope="col">description</th>
+                            <th scope="col">Code fiscal</th>
+                            <th scope="col">Exonération</th>
+                            <th scope="col">statut</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        {% for groupe_taxe in taxe %}
+                        <tr>
+
+                            <td>{{groupe_taxe.libele}}</td>
+                            <td>{{groupe_taxe.taux}}</td>
+                            <td>{{groupe_taxe.description}}</td>
+                            <td>{{groupe_taxe.code_fiscal}}</td>
+                            <td>{{groupe_taxe.exoneration}}</td>
+                            <td>{{groupe_taxe.statut}}</td>
+                            <td>
+                                <div class="actions-dropdown">
+                                    <i class="fas fa-ellipsis-v dropdown-toggle" data-toggle="dropdown"></i>
+                                    <!-- <button class="dropdown-toggle" data-toggle="dropdown">Actions</button> -->
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="">Modifier</a>
+                                        <a class="dropdown-item" href="">Supprimer</a>
+                                    </div>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+<!-- le popup d'ajout de famille -->
+<div class="modal fade" id="ajouterTaxeModal" tabindex="-1" role="dialog" aria-labelledby="ajouterTaxeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ajouterFamilleModalLabel">Ajouter une Taxe</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--  formulaire d'ajout de contact  -->
+                <form action="{% url 'paramettre:groupe-de-taxe' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        {{ form.libele }}
+                    </div>
+
+                    <div class="row mb-3">
+                        {{ form.taux }}
+
+                    </div>
+
+                    <div class="row mb-3">
+                        {{ form.description }}
+
+                    </div>
+                    <div class="row mb-3">
+                        {{ form.code_fiscal }}
+
+                    </div>
+                    <div class="row mb-3">
+                        {{ form.exoneration }}
+
+                    </div>
+                    <div class="row mb-3">
+                        {{ form.statut }}
+
+                    </div>
+                    <button type="submit" class="btn btn-primary">Valider</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const ajouterContactForm = document.getElementById('ajouterTaxeForm');
+        const closeButton = document.querySelector('#ajouterTaxeModal .close');
+
+        ajouterContactForm.addEventListener('click', () => {
+            $('#ajouterTaxeModal').modal('show');
+        });
+
+        closeButton.addEventListener('click', () => {
+            $('#ajouterTaxeModal').modal('hide');
+        });
+    });
+
+</script>
+{% endblock %}

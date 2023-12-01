@@ -1,0 +1,390 @@
+<!-- Fenêtre modale de confirmation succes-->
+<div class="modal" tabindex="-1" role="dialog" id="confirmationModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Le formulaire a été soumis avec succès!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- script de confirmation succes-->
+
+<script>
+    function afficherConfirmation() {
+        $('#confirmationModal').modal('show');
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        afficherConfirmation();
+    });
+</script>
+
+
+
+<!-- message de succes ajout de contact -->
+<script>
+    // Attendre que le document soit prêt
+    $(document).ready(function () {
+        // Afficher le message de confirmation
+        $('#messageConfirmation').fadeIn('slow');
+
+        // Masquer le message après 3 secondes
+        setTimeout(function () {
+            $('#messageConfirmation').fadeOut('slow');
+        }, 3000);
+    });
+</script>
+
+
+<script>
+    // Activer la liste déroulante avec jQuery
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown();
+    });
+</script>
+
+<!-- action -->
+<div class="btn-action ">
+
+    <a href="" class="btn btn-modif">
+        <i class="fas fa-pencil-alt"></i>
+        Modifier
+    </a>
+
+</div>
+<div class="btn-action ">
+
+    <a href="" class="btn btn-supp">
+        <i class="fas fa-trash-alt"></i>
+        Supprimer
+    </a>
+
+</div>
+<!-- bution dropdown -->
+<div class="actions-dropdown">
+    <i class="fas fa-ellipsis-v dropdown-toggle" data-toggle="dropdown"></i>
+    <!-- <button class="dropdown-toggle" data-toggle="dropdown">Actions</button> -->
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="{% url 'modifier-contact' contact.id %}">Modifier</a>
+        <a class="dropdown-item" href="{% url 'supprimer-contact' contact.id %}">Supprimer</a>
+    </div>
+</div>
+
+
+
+
+<!-- Script pour afficher la fenêtre modale de confirmation du succes d'ajout -->
+
+
+<script>
+    function afficherConfirmationSucces() {
+        // Utilisez Ajax pour envoyer le formulaire de manière asynchrone
+        $.ajax({
+            url: "{% url 'gestionnaire-contact' %}",
+            type: "post",
+            data: $('#monFormulaire').serialize(),
+            success: function (response) {
+                $('#contenuMaj').html(response);
+                // Vérifiez si le traitement a été réussi
+                print(response.traitement_reussi)
+                if (response.traitement_reussi) {
+                    // Affichez la fenêtre modale après avoir reçu la réponse du serveur
+                    $('#confirmationModal').modal('show');
+                }
+            },
+            error: function (error) {
+                console.log("Erreur lors de l'envoi du formulaire:", error);
+                // Gérez les erreurs si nécessaire
+            }
+        });
+    }
+</script>
+
+
+
+
+
+<!-- Script pour afficher la fenêtre modale de validation de l'ajout du contact -->
+<script>
+    function confirmerEnvoi() {
+        var confirmation = confirm("Êtes-vous sûr de vouloir soumettre ce formulaire?");
+
+        if (confirmation) {
+            // Si l'utilisateur a cliqué sur "OK", soumettez le formulaire
+            document.getElementById('boutonEnvoyer').click();
+        }
+
+        // Retournez false pour empêcher la soumission normale du formulaire
+        return false;
+    }
+</script>
+<div class="actions-dropdown">
+    <button class="dropdown-toggle btn" data-toggle="dropdown">Action</button>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="{% url 'deconnexion' %}">Déconnexion</a>
+    </div>
+</div>
+
+
+<div class="actions-dropdown">
+    <i class="fas fa-ellipsis-v dropdown-toggle" data-toggle="dropdown"></i>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="{% url 'modifier-contact' contact.id %}">Modifier</a>
+        <a class="dropdown-item" href="{% url 'supprimer-contact' contact.id %}">Supprimer</a>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="form-group col-md-6">
+
+        {{ form.image }}
+    </div>
+    <div class="form-group col-md-6">
+        {{ form.famille }}
+
+    </div>
+</div>
+
+
+<div class="row">
+
+
+    <div class="form-group col-md-6">
+        <div class="mb-3">
+            {{ commande_form.reference }}
+        </div>
+
+        <div class="mb-3">
+            {{ commande_form.date_commande }}
+
+        </div>
+        <div class="mb-3">
+            {{ commande_form.date_reception }}
+
+        </div>
+
+        <div class="mb-3">
+            {{ commande_form.statut }}
+
+        </div>
+
+        <div class=" input-group mb-3">
+            <div class="input-group-text"> {{ form.fournisseur.label }} </div>
+            {{ form.fournisseur }}
+        </div>
+    </div>
+
+
+    <div class="form-group col-md-6">
+
+        {{ lignes_commande_formset.management_form }}
+        {% for form in lignes_commande_formset %}
+        {{ form.as_table }}
+        {% endfor %}
+
+
+    </div>
+
+</div>
+<div class="mb-3">
+    {{ ligne_commande_form.commande }}
+
+</div>
+
+<div class="mb-3">
+    {{ ligne_commande_form.produit }}
+
+</div>
+<div class="mb-3">
+    {{ ligne_commande_form.prix_unitaire }}
+
+</div>
+<div class="mb-3">
+    {{ ligne_commande_form.quantite }}
+
+</div>
+
+<div class="mb-3">
+    {{ ligne_commande_form.montant }}
+
+</div>
+<div class="modal-dialog" style="min-width: 200px; min-height: 100px;">
+    <div class="modal-content">
+        ...
+    </div>
+    </di
+
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <!-- Boucle pour chaque produit -->
+        {% for produit in form.ordered_fields %}
+            <label>{{ produit.label }}</label>
+            {{ produit }}
+            <!-- Ajoute des champs associés ici, par exemple : -->
+            Quantité : <input type="number" name="quantite_{{ produit.value }}" required>
+            Prix unitaire : <input type="number" name="prix_unitaire_{{ produit.value }}" step="0.01" required>
+            Montant : <input type="number" name="montant_{{ produit.value }}" step="0.01" required>
+        {% endfor %}
+        
+        <button type="submit">Enregistrer</button>
+    </form>
+  
+    <table class="table">
+        {% for field in form %}
+            <tr>
+                <td>
+                    {{ field.label_tag }}
+                </td>
+                <td>
+                    {{ field }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+    <input type="hidden" id="formsetCounter" value="{{ formset.management_form.total_form_count }}">
+
+<script>
+    $(document).ready(function() {
+        // Récupération de la valeur de formsetCounter depuis le HTML
+        const formsetCounter = parseInt($('#formsetCounter').val());
+
+        // Compteur pour générer des préfixes uniques pour les nouveaux formsets
+        let nextFormsetCounter = formsetCounter;
+
+        // Fonction pour ajouter un nouveau formset
+        function addFormset() {
+            // Copie du premier formset et modification des noms des champs pour les rendre uniques
+            const newFormset = $('#formsets-container fieldset:first').clone();
+            newFormset.find(':input').each(function() {
+                const name = $(this).attr('name').replace('-0-', '-' + nextFormsetCounter + '-');
+                const id = $(this).attr('id').replace('-0-', '-' + nextFormsetCounter + '-');
+                $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            });
+
+            // Incrémentation du compteur pour le prochain formset
+            nextFormsetCounter++;
+
+            // Ajout du nouveau formset au conteneur
+            $('#formsets-container').append(newFormset);
+        }
+
+        // Gestionnaire d'événement pour le clic sur le bouton d'ajout
+        $('#add-formset').on('click', function() {
+            addFormset();
+        });
+    });
+</script>
+
+
+                      {{ formset.management_form }}
+                        {% for form in formset %}
+                        <div class="row">
+                            {% for field in form %}
+                                <div class="col-md-2">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                            {% endfor %}
+                       </div>
+
+
+                       <script type="text/html" id="variants-template">
+                        <tr id="variants-__prefix__" class= hide_all>
+                            {% for fields in formset.empty_form.hidden_fields %}
+                                {{ fields }}
+                            {% endfor %}
+                        
+                            {% for fields in formset.empty_form.visible_fields %}
+                                <td>{{fields}}</td>
+                            {% endfor %}
+                        </tr>
+                        
+                         
+                    </script> 
+
+                    <template id="variants-template">
+                        <tr class="hide_all">
+                            {% for fields in formset.empty_form.hidden_fields %}
+                                {{ fields }}
+                            {% endfor %}
+                            {% for fields in formset.empty_form.visible_fields %}
+                                <td>{{ fields }}</td>
+                            {% endfor %}
+                        </tr>
+                         </template>
+                    {% endcomment %}
+
+
+                         <script type="text/html" id="variants-template">
+                            <tr id="variants-__prefix__" class= hide_all>
+                                {% for fields in formset.empty_form.hidden_fields %}
+                                    {{ fields }}
+                                {% endfor %}
+                            
+                                {% for fields in formset.empty_form.visible_fields %}
+                                    <td>{{fields}}</td>
+                                {% endfor %}
+                            </tr>
+                        </script>
+
+                        <script>
+                            // $(document).ready(function () {
+//     // when user clicks add more btn of variants
+//     $('.add-variants').click(function (ev) {
+//         ev.preventDefault();
+//         var count = $('#item-variants').children().length;
+//         var template = $('#variants-template')[0];
+//         var clone = template.cloneNode(true);
+//         $('#item-variants').append(clone);
+
+//         // update form count
+//         $('#id_variants-TOTAL_FORMS').attr('value', count + 1);
+//     });
+// });
+  </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const ajouterCommandeForm = document.getElementById('ajouterCommandeForm');
+    const closeButton = document.querySelector('#ajouterCommandeModal .close');
+
+    ajouterCommandeForm.addEventListener('click', () => {
+        // Utilisez AJAX pour déclencher la création d'une nouvelle commande
+        $.ajax({
+            url: "{% url 'gstock:create_commande' %}",  // Remplacez par l'URL correcte
+            type: 'GET', 
+            success: function(response) {
+                // La réponse pourrait contenir des informations sur la nouvelle commande créée
+                console.log(response);
+                $('#ajouterCommandeModal').modal('show');
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+    });
+
+    closeButton.addEventListener('click', () => {
+        $('#ajouterCommandeModal').modal('hide');
+    });
+});
+</script>

@@ -1,0 +1,89 @@
+{% extends 'contact/basecontact.html' %}
+{% load static %}
+
+
+
+{% block contact %}  
+           
+           
+             <div class="listeclient">
+                <div class="recentOrders">
+                    <div class="cardHeader">
+                        <h2>Prospects({{nbr}})</h2>
+                        <h5>
+                            {% if ajout_reussi %}
+                            <div id="messageConfirmation" class="alert alert-success">
+                                contact ajouté avec succès!
+                            </div>
+                            {% endif %}
+                            {% if modification_reussi %}
+                            <div id="messageConfirmation" class="alert alert-success">
+                                contact modifié avec succès!
+                            </div>
+                            {% endif %}
+                            {% if suppression_reussi %}
+                             <div id="messageConfirmation" class="alert alert-success">
+                                contact supprimé !
+                               </div>
+                                {% endif %}
+                        </h5>
+                        <div class="search">
+                            <label>
+                                <input type="text" id="champ_recherche" placeholder="Recherche ici">
+                                <ion-icon name="search-outline"></ion-icon>
+                            </label>
+                        </div>
+                        <a href="#" class="btn">Tout</a>
+                    </div>
+                   
+                 <!-- inclure la table contenant la liste des contacts cest aussi le coneteur des resultats de recherche-->
+                <div id="resultats_recherche">
+                    {% include 'contact/recherche_prospect.html' %}
+
+                </div>
+                </div> 
+
+            
+            
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Fonction pour déclencher la recherche à mesure que l'utilisateur tape
+        $('#champ_recherche').on('input', function () {
+            var termeRecherche = $(this).val();
+    
+            // Effectuer une requête AJAX pour récupérer les résultats de la recherche
+            $.ajax({
+                url: '{% url "contact:recherche_prospect" %}',
+                data: { 'term_recherche': termeRecherche },
+                dataType: 'html',
+                success: function (data) {
+                    // Mettre à jour le conteneur des résultats avec les nouveaux résultats
+                    $('#resultats_recherche').html(data);
+                }
+            });
+        });
+    </script>
+    
+    
+    <script>
+        // Fonction qui supprime le message de confirmation
+        function supprimerMessage() {
+            // document.getElementById("messageConfirmation").remove();
+            document.getElementById("messageConfirmation").fadeOut(3000);
+        }
+    
+        // Définir un délai de 3 secondes avant l'exécution de la fonction
+        setTimeout(supprimerMessage, 3000);
+    </script>
+    <!-- <script>
+        // Définir un délai de 3 secondes avant de réduire l'opacité du message de confirmation à 0
+        setTimeout(function() {
+            document.getElementById("messageConfirmation").style.opacity = 0;
+        }, 3000);
+    </script> -->
+  {% endblock %}

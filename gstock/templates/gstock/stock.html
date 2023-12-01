@@ -1,0 +1,106 @@
+{% extends 'gestionnaire/base.html' %}
+{% load static %} 
+
+
+{% block titre %}
+<h1>Gestion commerciale</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="listeclient">
+                
+    <div class="recentOrders">
+       
+        <div class="cardHeader">
+            <h2>Stock</h2>
+
+            <div class="search">
+                <label>
+                    <input type="text" placeholder="Recherche ici">
+                    <ion-icon name="search-outline"></ion-icon>
+                </label>
+            </div>
+            <a href="#" class="btn">Tout</a>
+        </div>
+
+       <div class="scrol-table">
+        <table >
+            <thead>
+                <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Désignation</th>
+                    <th scope="col">Unité</th>
+                    <th scope="col">Seuil d'alerte</th>
+                    <th scope="col">stock initial</th>
+                    <th scope="col">Entrée</th>
+                    <th scope="col">Sortie</th>
+                    <th scope="col">Stock final</th>
+                    <th scope="col">CUMP</th>
+                    <th scope="col">Valeur du stock</th>
+                    <th scope="col">Statue</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+    
+    
+                {% for produit in produits %}
+                <tr>
+                    <td>{{produit.code}}</td>
+                    <td>{{produit.libele}}</td>
+                    <td>{{produit.unite_mesure}}</td>
+                    <td>{{produit.seuil}}</td>
+                    <td>{{produit.stock_initial}}</td>
+                    <td>{{produit.entre}}</td>
+                    <td>{{produit.sortie}}</td>
+                    <td>{{produit.stock_final}}</td>
+                    <td>{{produit.cout}}</td>
+                    <td>{{produit.statue}}</td>
+                    <td>{{valeur}}</td>
+                    <td>
+                        <div class="actions-dropdown">
+                            <i class="fas fa-ellipsis-v dropdown-toggle" data-toggle="dropdown"></i>
+                            <!-- <button class="dropdown-toggle" data-toggle="dropdown">Actions</button> -->
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="">Modifier</a>
+                                <a class="dropdown-item" href="">Supprimer</a>
+                            </div>
+                        </div>
+                        <!-- <div class="btn-action ">
+                          
+                               <a href="" class="btn btn-modif"   >
+                                <i class="fas fa-pencil-alt"></i>
+                                
+                               </a>
+                            
+                        </div>
+                        <div class="btn-action ">
+                            
+                                <a href="" class="btn btn-supp" >
+                                    <i class="fas fa-trash-alt"></i>
+                                      
+                                </a>
+                             
+                        </div> -->
+                    </td>
+                   
+                </tr>
+               
+                {% endfor %}
+             
+              
+            </tbody>
+          </table>
+    
+    </div>
+    </div> 
+
+
+
+
+</div>
+</div>
+</div>
+
+{% endblock %}
