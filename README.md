@@ -1,2 +1,2 @@
 # Gcom
-Dépôt de l'application web de gestion commerciale gcom
+Dépôt de l'application web de gestion commerciale (gcom)
