@@ -27,16 +27,19 @@ def signup(request):
             print("niveau 2")
             username = request.POST["username"]
             email = request.POST["email"]
-            password = clean_password2(request.POST["password1"],request.POST["password2"])
-            if password:
-                print(f"niveau 3")
-                utilisateur = User.objects.create_user(username=username,email=email,password=password)
-                utilisateur.save()
-                print(f"niveau 4 {utilisateur}")
+            password1 = request.POST["password1"]
+            password2 = request.POST["password2"]
             
+            if password1:
+                if password1 != password2:
+                    context = {'message': "les mots de passe ne correspondent pas"}
+                    return render(request,'usercompte/signup.html',context)
+                else:
+                    utilisateur = User.objects.create_user(username=username,email=email,password=password1)
+                    utilisateur.save()
                 return redirect('inscription-succes')
             else:
-                context = {'message': "une erreur est survenu"}
+                context = {'message': "choissisez un mot de passe"}
                 return render(request,'usercompte/signup.html',context)
      return render(request,'usercompte/signup.html')
 
@@ -230,7 +233,7 @@ def login_user(request):
      
 
 def logout_user(request):
-       return LogoutView.as_view(next_page=reverse_lazy('index'))(request)
+       return LogoutView.as_view(next_page=reverse_lazy('gcom:index'))(request)
 
 
 def inscription_succes(request):
@@ -243,5 +246,7 @@ def inscription_refuse(request):
 
 def clean_password2(password1,password2):
          if password1 != password2:
-             raise forms.ValidationError('Les mots de passe ne correspondent pas.')
+            # raise forms.ValidationError('Les mots de passe ne correspondent pas.')
+             context = {'message': "Les mots de passe ne correspondent pas."}
+             
          return password2

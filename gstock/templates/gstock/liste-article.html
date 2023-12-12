@@ -6,9 +6,7 @@
 {% endblock %}
 
 {% block content %}
-{% load django_bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+
 
 <div class="listeclient">
 
@@ -60,7 +58,7 @@
 
 
 <div class="decon">
-    <!-- le popup d'ajout de produit -->
+    <!-- le popup d'ajout d'un article -->
     <div class="modal fade" id="ajouterArticleModal" tabindex="-1" role="dialog"
         aria-labelledby="ajouterArticleModalLabel" aria-hidden="true">
         <div class="modal-dialog " role="document">
@@ -80,27 +78,38 @@
                         {% csrf_token %}
 
                         <div class="mb-3">
-                            {{ form.libele }}
-                        </div>
-
-                        <div class="mb-3">
                             {{ form.code }}
 
                         </div>
                         <div class="mb-3">
+                            {{ form.libele }}
+                        </div>
+
+                       
+                        <div class="mb-3">
                             {{ form.description }}
 
                         </div>
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">{{ form.famille.label_tag }} </div>
+                            {{ form.famille }}
+                        </div>
 
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">  {{ form.fournisseur.label_tag }} </div>
+                            {{ form.fournisseur }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.cout_achat }}
+
+                        </div>
                         <div class="mb-3">
                             {{ form.prix }}
 
                         </div>
                         
-                        <div class=" input-group mb-3">
-                            <div class="input-group-text">  {{ form.fournisseur.label_tag }} </div>
-                            {{ form.fournisseur }}
-                        </div>
+                       
                         <div class="mb-3">
                             {{ form.quantite }}
 
@@ -110,10 +119,7 @@
                             {{ form.niveau_alerte_stock }}
 
                         </div>
-                        <div class="mb-3">
-                            {{ form.cout_achat }}
-
-                        </div>
+                        
 
                         
                         <div class=" input-group mb-3">
@@ -135,10 +141,7 @@
 
                         </div>
 
-                        <div class=" input-group mb-3">
-                            <div class="input-group-text">{{ form.famille.label_tag }} </div>
-                            {{ form.famille }}
-                        </div>
+                       
 
 
                         <div class="mb-3">
@@ -157,7 +160,7 @@
 
 
 <div class="decon">
-    <!-- le popup d'ajout de produit -->
+    <!-- le popup de modification-->
     <div class="modal fade" id="modifierArticleModal" tabindex="-1" role="dialog"
         aria-labelledby="modifierArticleModalLabel" aria-hidden="true">
         <div class="modal-dialog " role="document">
@@ -172,33 +175,41 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!--  formulaire d'ajout de article  -->
+                    <!--  formulaire de modification d'un atrticle  -->
                     <form method="post" action="{% url 'stock:modifier-article' %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="hidden" name="article_id" id="article_id" value="{{ form.instance.id }}">
-
-                        <div class="mb-3">
-                            {{ form.libele }}
-                        </div>
 
                         <div class="mb-3">
                             {{ form.code }}
 
                         </div>
                         <div class="mb-3">
+                            {{ form.libele }}
+                        </div>
+                        <div class="mb-3">
                             {{ form.description }}
 
                         </div>
-
-                        <div class="mb-3">
-                            {{ form.prix }}
-
+                        <div class=" input-group mb-3">
+                            <div class="input-group-text">{{ form.famille.label_tag }} </div>
+                            {{ form.famille }}
                         </div>
+                        
                         
                         <div class=" input-group mb-3">
                             <div class="input-group-text">  {{ form.fournisseur.label_tag }} </div>
                             {{ form.fournisseur }}
                         </div>
+                        <div class="mb-3">
+                            {{ form.cout_achat }}
+
+                        </div>
+                        <div class="mb-3">
+                            {{ form.prix }}
+
+                        </div>
+                       
                         <div class="mb-3">
                             {{ form.quantite }}
 
@@ -208,10 +219,7 @@
                             {{ form.niveau_alerte_stock }}
 
                         </div>
-                        <div class="mb-3">
-                            {{ form.cout_achat }}
-
-                        </div>
+                       
 
                         
                         <div class=" input-group mb-3">
@@ -227,17 +235,6 @@
                             <div class="input-group-text">  {{ form.date_peremption.label_tag }} </div>
                             {{ form.date_peremption }}
                         </div>
-
-                        <div class="mb-3">
-                           
-
-                        </div>
-
-                        <div class=" input-group mb-3">
-                            <div class="input-group-text">{{ form.famille.label_tag }} </div>
-                            {{ form.famille }}
-                        </div>
-
 
                         <div class="mb-3">
                             {{ form.image }}

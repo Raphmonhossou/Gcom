@@ -180,7 +180,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         const ajouterContactForm = document.getElementById('ajouterContactForm');
         const closeButton = document.querySelector('#ajouterContactModal .close');
-        const closeButton1 = document.querySelector('#modifierContactModal .close');
+       
 
         ajouterContactForm.addEventListener('click', () => {
             $('#ajouterContactModal').modal('show');
@@ -188,11 +188,11 @@
 
         closeButton.addEventListener('click', () => {
             $('#ajouterContactModal').modal('hide');
+            window.location.href = '{% url "contact:afficher-contact" %}'; 
+
         });
 
-        closeButton1.addEventListener('click', () => {
-            $('#modifierContactModal').modal('hide');
-        });
+       
     });
 
 </script>
@@ -205,7 +205,6 @@
 <input type="hidden" id="afficherModal" value="{{ afficherModal }}">
 <input type="hidden" id="afficherModalModification" value="{{ afficherModalModification }}">
 
-
 <!-- affichage modal  d'ajout contact  si une boolean est vrai -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -215,9 +214,8 @@
         // Récupérez le modal
         var modal = document.getElementById('ajouterContactModal');
 
-        // Assurez-vous que la valeur de afficherModal est "True" (chaine de caractères) ou évaluée à true
         if (afficherModal && (afficherModal.toLowerCase() === 'true' || afficherModal === true)) {
-            // Assurez-vous que Bootstrap est chargé (si vous utilisez Bootstrap)
+            // Assurer que Bootstrap est chargé 
             if (typeof $().modal === 'function') {
                 // Utilisez Bootstrap pour afficher le modal
                 $(modal).modal('show');
@@ -232,7 +230,8 @@
 
 </script>
 
-<!-- affichage de popup modification si vrai -->
+<!-- affichage de popup modification si afficherModalModification est vrai -->
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -240,28 +239,52 @@
 
         // Récupérez le modal
         var modal = document.getElementById('modifierContactModal');
-
+       
         if (afficherModalModification && (afficherModalModification.toLowerCase() === 'true' || afficherModalModification === true)) {
-            // Assurez que Bootstrap est chargé (si vous utilisez Bootstrap)
+            
+            // Assurer que Bootstrap est chargé 
             if (typeof $().modal === 'function') {
+            
                 // Utilisez Bootstrap pour afficher le modal
                 $(modal).modal('show');
+                
             } else {
                 // Si Bootstrap n'est pas disponible,  simplement afficher le modal
                 modal.style.display = 'block';
+                
             }
+
+          var closeButton = document.querySelector('#modifierContactModal .close');
+            closeButton.addEventListener('click', function () {
+                $('#modifierContactModal').modal('hide');
+                window.location.href = '{% url "contact:afficher-contact" %}'; 
+            });
+           
+    // Ajoutez un événement pour rediriger vers la page contact lorsque l'utilisateur clique à l'extérieur du modal
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    window.location.href = '{% url "contact:afficher-contact" %}'; // Rediriger vers la page contact
+                }
+            });
+
         }
     });
 
 
 </script>
 
-<script>
+ <!-- <script>
     // Activer la liste déroulante avec jQuery
     $(document).ready(function () {
         $('.dropdown-toggle').dropdown();
     });
 </script>
+<script>
+    $(document).ready(function() {
+    $('#modifierContactModal').modal();
+  });
+  
+</script> -->
 
 {% endblock %}
 

@@ -78,7 +78,7 @@ class CommandeFournisseur(models.Model):
     ]
 
     fournisseur = models.ForeignKey(Contact, on_delete=models.CASCADE, verbose_name='Fournisseur',limit_choices_to={'categorie': 'Fournisseur'})
-    date_commande = models.DateField(verbose_name='Date de Commande')
+    date_commande = models.DateField(verbose_name='Date')
     produits = models.ManyToManyField('Produit', through='LigneCommande', verbose_name='Produits')
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='En cours', verbose_name='Statut de la Commande')
     reference = models.CharField(max_length=100, verbose_name='Reference')

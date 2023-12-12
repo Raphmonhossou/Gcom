@@ -137,3 +137,15 @@ LigneCommandeFormSet = forms.inlineformset_factory(CommandeFournisseur, LigneCom
        
 # 'type': forms.RadioSelect(attrs={'class': 'form-check-input radio-inline'}, choices=[('Particulier', 'Particulier'), ('Societe', 'Société')]),
 # 'categorie': forms.RadioSelect(attrs={'class': 'form-check-input radio-inline'}, choices=[('Client', 'Client'), ('Prospect', 'Prospect'), ('Fournisseur', 'Fournisseur')]),
+
+
+# def clean_date_commande(self):
+    #     date_commande = self.cleaned_data['date_commande']
+    #     # Convertir la date au format correct (YYYY-MM-DD)
+    #     formatted_date_commande = date_commande.strftime('%Y-%m-%d')
+    #     return formatted_date_commande
+    
+    
+     {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}

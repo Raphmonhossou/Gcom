@@ -9,7 +9,7 @@
    <div class="bloc-connexion text-center">
     
         <img class=" text-light bloc-connexion-img" src="{% static 'usercompte/img/user5.jpg' %}" height="100px" width="100px" alt="image">
-        <div class=" message-erreur text-light"> {{message}} </div>
+        <h5 style="background-color: white; width: 75%; margin-left: 50px;" class=" message-erreur "><span style="color: red;">{{message}}</span>  </h5>
         
         <form method="POST"  action="{% url 'usercompte:connexion' %}" > 
             {% csrf_token %}

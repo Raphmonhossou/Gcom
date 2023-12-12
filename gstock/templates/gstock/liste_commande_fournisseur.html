@@ -1,4 +1,5 @@
 <div class="scrol-table">
+    {{nombre}}
     {% if nombre is not None %}
     {% if nombre == 0 %}
         <p style="color: red;" >Aucune commande trouvée</p>
@@ -36,15 +37,25 @@
                 <td>{{commande.statut}}</td>
                 <td>{{commande.date_reception}}</td>
                 <td>
-                    <div class="btn-action">
-                        <a class="dropdown-item" href="{% url 'stock:update_commande' commande.id %}">Modifier</a>
-                        <a class="dropdown-item" href="{% url 'gstock:delete-commande-fournisseur' commande.id %}">Supprimer</a>
+                    <!-- <div class="btn-action">
+                        <a class="dropdown-item" href="{% url 'stock:modifier_commande' commande.id %}">Modifier</a>
                       
-                    </div>
+                    </div> -->
+
+                    <div class="dropdown">
+                        <a class="btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                         Actions
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item text-bg-warning" href="{% url 'stock:modifier_commande' commande.id %}">Modifier</a></li>
+                          <li><a class="dropdown-item text-bg-danger" href="javascript:void(0);"onclick="confirmerSuppression('{% url 'stock:delete-commande-fournisseur' commande.id %}')">Supprimer</a></li>
+                          <li><button type="button" id="btnDetail" class=" dropdown-item text-bg-success btn ">Détails</button></li>
+                        </ul>
+                      </div>
 
                 </td>
-
-            </tr>
+              </tr>
+                
 
             {% endfor %}
 
@@ -52,3 +63,60 @@
         </tbody>
     </table>
 </div>
+
+
+  <!-- boite de dialogue pour confimer la suppresion -->
+  <script>
+    function confirmerSuppression(url) {
+        // Affiche la boîte de dialogue de confirmation de la suppression
+        $('#confirmationModal').modal('show');
+  
+        // Ajoute un gestionnaire d'événement pour le clic sur le bouton "OK"
+        $('#btnOK').on('click', function() {
+            window.location.href = url;
+        });
+        $('#btnAnnuler').on('click', function() {
+            $('#confirmationModal').modal('hide');
+           // window.location.href = '{% url "contact:afficher-contact" %}'; 
+        });
+  
+        var modal = document.getElementById('confirmationModal');
+        var closeButton = document.querySelector('#confirmationModal .close');
+            closeButton.addEventListener('click', function () {
+                $('#confirmationModal').modal('hide');
+               // window.location.href = '{% url "contact:afficher-contact" %}'; 
+            });
+           
+            // rediriger vers la page contact lorsque l'utilisateur clique à l'extérieur du modal
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                 //   window.location.href = '{% url "contact:afficher-contact" %}'; // Rediriger vers la page contact
+                }
+            });
+  
+  
+    }
+  </script>
+  
+  <!-- Bootstrap Modal pour la confirmation -->
+  <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation de suppression</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cette commande ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnAnnuler" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" id="btnOK" class="btn btn-danger">OK</button>
+            </div>
+        </div>
+    </div>
+  </div>
+  
+  

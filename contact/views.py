@@ -255,6 +255,7 @@ def recuperer_contact_view(request, contact_id):
          nbr = Contact.objects.count()
          afficherModalModification=True
          context = {'contact_modif':contact,'contacts': contacts,'nbr':nbr, 'form': form,'afficherModalModification':afficherModalModification,'calling_page':calling_page}
+        
          return render(request, 'contact/liste-contact.html',context)
          
          

@@ -1,3 +1,5 @@
+import datetime
+from time import strptime
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
@@ -151,7 +153,8 @@ def stock_view(request):
 
 
    #========================= gestion des commandes fournisseur============================
-   
+ 
+"""
 def afficher_commande_fournisseur(request):
      form = CommandeFournisseurForm()
      formset = LigneCommandeFormSet(instance=CommandeFournisseur())
@@ -210,7 +213,7 @@ def nouvelle_commande_fournisseur_view(request):
           
            return render(request, 'gstock/nouvelle_commande_fournisseur.html', {'form':form,'formset': formset})
 
-
+""" 
 
 
 class CommandeInline():
@@ -222,12 +225,13 @@ class CommandeInline():
         named_formsets = self.get_named_formsets()
         if not all((x.is_valid() for x in named_formsets.values())):
             return self.render_to_response(self.get_context_data(form=form))
-
+       
         self.object = form.save()
 
         # for every formset, attempt to find a specific formset save function
         # otherwise, just save.
         for name, formset in named_formsets.items():
+           
             formset_save_func = getattr(self, 'formset_{0}_valid'.format(name), None)
             if formset_save_func is not None:
                 formset_save_func(formset)
@@ -235,29 +239,29 @@ class CommandeInline():
                 formset.save()
         return redirect('stock:liste_commande_fournisseur')
 
-    def formset_variants_valid(self, formset):
+    def formset_produits_valid(self, formset):
         """
         Hook for custom formset saving.Useful if you have multiple formsets
         """
-        variants = formset.save(commit=False)  # self.save_formset(formset, contact)
+        produits = formset.save(commit=False)  # self.save_formset(formset, contact)
         # add this 2 lines, if you have can_delete=True parameter 
         # set in inlineformset_factory func
         for obj in formset.deleted_objects:
             obj.delete()
-        for variant in variants:
-            variant.commande = self.object
-            variant.save()
+        for produit in produits:
+            produit.commande = self.object
+            produit.save()
 
-    
+   
             
 
-class CommandeCreate(CommandeInline, CreateView):
+class CreerCommande(CommandeInline, CreateView):
 
     def get_context_data(self, **kwargs):
         commande_fournisseurs = CommandeFournisseur.objects.all()
         nbr = commande_fournisseurs.count()
          
-        ctx = super(CommandeCreate, self).get_context_data(**kwargs)
+        ctx = super(CreerCommande, self).get_context_data(**kwargs)
         ctx['named_formsets'] = self.get_named_formsets()
         ctx['afficherModaleCommandeFournisseur'] = True
         ctx['commande_fournisseurs'] = commande_fournisseurs
@@ -266,26 +270,32 @@ class CommandeCreate(CommandeInline, CreateView):
 
     def get_named_formsets(self):
         if self.request.method == "GET":
-            return {'variants': LigneCommandeFormSet(prefix='variants'), }
+            return {'produits': LigneCommandeFormSet(prefix='produits'), }
         else:
-            return {'variants': LigneCommandeFormSet(self.request.POST or None, self.request.FILES or None, prefix='variants'),}
+            return {'produits': LigneCommandeFormSet(self.request.POST or None, self.request.FILES or None, prefix='produits'),}
 
 
-class CommandeUpdate(CommandeInline, UpdateView):
-   
+
+
+class ModifierCommande(CommandeInline, UpdateView):
+    
     def get_context_data(self, **kwargs):
         commande_fournisseurs = CommandeFournisseur.objects.all()
         nbr = commande_fournisseurs.count()
-        ctx = super(CommandeUpdate, self).get_context_data(**kwargs)
+        
+        ctx = super(ModifierCommande, self).get_context_data(**kwargs)
+        ctx['named_formsets'] = self.get_named_formsets()
         ctx['commande_fournisseurs'] = commande_fournisseurs
         ctx['nbr'] = nbr
         ctx['afficherModaleCommandeFournisseur'] = True
+        
         return ctx
 
     def get_named_formsets(self):
         return {
-            'variants': LigneCommandeFormSet(self.request.POST or None, self.request.FILES or None, instance=self.object, prefix='variants'),
+            'produits': LigneCommandeFormSet(self.request.POST or None, self.request.FILES or None, instance=self.object, prefix='produits'),
         }
+          
         
 
 
@@ -308,15 +318,15 @@ class ListeCommande(ListView):
 
 
 
-def delete_variant(request, pk):
+def delete_produit(request, pk):
     try:
-        variant = LigneCommande.objects.get(id=pk)
+        ligne_commande = LigneCommande.objects.get(id=pk)
     except LigneCommande.DoesNotExist:
         messages.success(request, 'Object Does not exit')
-        return redirect('stock:update_commande', pk=variant.produit.id)
-    variant.delete()
+        return redirect('stock:modifier_commande', pk=ligne_commande.produit.id)
+    ligne_commande.delete()
     messages.success( request, 'ligne de commande  supprimée')
-    return redirect('stock:update_commande', pk=variant.produit.id)
+    return redirect('stock:modifier_commande', pk=ligne_commande.produit.id)
 
 
 def delete_commande(request, pk):
@@ -327,8 +337,8 @@ def delete_commande(request, pk):
         return redirect('stock:update_commande', pk=commande.id)
 
     commande.delete()
-    messages.success( request, 'ligne de commande  supprimée')
-    return redirect('stock:update_commande', pk=commande.id)
+    messages.success(request, 'commande  supprimée')
+    return redirect('stock:liste_commande_fournisseur')
 
 
 
@@ -427,18 +437,18 @@ def supprimer_commande_fournisseur_view(request,commande_fournisseur_id):
 
      return redirect('liste-article')    
 
-    
+ 
 class RechercheCommandeFournisseurView(View):
     template_name = 'gstock/liste_commande_fournisseur.html'
 
     def get(self, request):
         term_recherche = request.GET.get('term_recherche', '')
 
-        # Filtrer les articles en fonction du terme de recherche
-        #contacts = Contact.objects.filter(name__icontains=term_recherche)
         commande_fournisseurs = CommandeFournisseur.objects.filter(models.Q(date_commande__icontains=term_recherche) | models.Q(reference__icontains=term_recherche))
         nombre = commande_fournisseurs.count()
-        context = {'nombre':nombre,'commande_clients': commande_fournisseurs, 'term_recherche': term_recherche}
+        context = {'nombre':nombre,'commande_fournisseurs': commande_fournisseurs, 'term_recherche': term_recherche}
+        print(commande_fournisseurs)
+        print(nombre)
         
         # Si la requête est une requête AJAX, renvoyer le fragment HTML
         #    if request.is_ajax():
@@ -448,7 +458,6 @@ class RechercheCommandeFournisseurView(View):
             return render(request, 'gstock/resultats_recherche.html', context)
 
         return render(request, self.template_name, context)
-
 
 
 
@@ -492,18 +501,18 @@ class CommandeClientInline():
                 formset.save()
         return redirect('stock:liste_commande_client')
 
-    def formset_variants_valid(self, formset):
+    def formset_produits_valid(self, formset):
         """
         Hook for custom formset saving.Useful if you have multiple formsets
         """
-        variants = formset.save(commit=False)  # self.save_formset(formset, contact)
+        produits = formset.save(commit=False)  # self.save_formset(formset, contact)
         # add this 2 lines, if you have can_delete=True parameter 
         # set in inlineformset_factory func
         for obj in formset.deleted_objects:
             obj.delete()
-        for variant in variants:
-            variant.commande = self.object
-            variant.save()
+        for produit in produits:
+            produit.commande = self.object
+            produit.save()
 
 
 class CommandeClientCreate(CommandeClientInline, CreateView):
@@ -521,9 +530,9 @@ class CommandeClientCreate(CommandeClientInline, CreateView):
 
     def get_named_formsets(self):
         if self.request.method == "GET":
-            return {'variants': LigneCommandeClientFormSet(prefix='variants'), }
+            return {'produits': LigneCommandeClientFormSet(prefix='produits'), }
         else:
-            return {'variants': LigneCommandeClientFormSet(self.request.POST or None, self.request.FILES or None, prefix='variants'),}
+            return {'produits': LigneCommandeClientFormSet(self.request.POST or None, self.request.FILES or None, prefix='produits'),}
 
 
 
@@ -540,7 +549,7 @@ class UpdateCommandeClient(CommandeClientInline, UpdateView):
 
     def get_named_formsets(self):
         return {
-            'variants': LigneCommandeClientFormSet(self.request.POST or None, self.request.FILES or None, instance=self.object, prefix='variants'),
+            'produits': LigneCommandeClientFormSet(self.request.POST or None, self.request.FILES or None, instance=self.object, prefix='produits'),
         }
 
 
@@ -548,13 +557,13 @@ class UpdateCommandeClient(CommandeClientInline, UpdateView):
 
 def delete_produit_client(request, pk):
     try:
-        variant = LigneCommandeClient.objects.get(id=pk)
+        produit = LigneCommandeClient.objects.get(id=pk)
     except LigneCommandeClient.DoesNotExist:
         messages.success(request, 'Object Does not exit')
-        return redirect('stock:update_commande_client', pk=variant.produit.id)
-    variant.delete()
+        return redirect('stock:update_commande_client', pk=produit.produit.id)
+    produit.delete()
     messages.success( request, 'ligne de commande  supprimée')
-    return redirect('stock:update_commande_client', pk=variant.produit.id)
+    return redirect('stock:update_commande_client', pk=produit.produit.id)
 
 
 def delete_commande_client(request, pk):

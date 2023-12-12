@@ -6,22 +6,22 @@
 {% endblock %}
 
 {% block content %}
-    {% load django_bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
+   
 
 <div class="cardBox">
     <div class="card">
-        <div class="cardName"> Mes taches</div>
-        <div>
+        <div class="cardName"> Mes contacts</div>
+        <div class="iconBx">
+           
+            <h1>  {{nbr_contact}}</h1>
         </div>
 
     </div>
 
     <div class="card">
-        <div class="cardName"> Mon agenda</div>
-        <div>
-
+        <div class="cardName"> Mes articles</div>
+        <div class="iconBx">
+        <h1>  {{nbr_article}}</h1>
         </div>
     </div>
 
@@ -29,9 +29,9 @@
 
 <div class="cardBox">
     <div class="card">
-        <div class="cardName"> CA</div>
-        <div>
-
+        <div class="cardName">Commandes</div>
+        <div class="iconBx">
+            <h1>  {{nbr_commande}}</h1>
         </div>
 
     </div>

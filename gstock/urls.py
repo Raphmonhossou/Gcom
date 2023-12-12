@@ -1,5 +1,5 @@
 from django.urls import include, path
-from gstock.views import CommandeClientCreate, CommandeCreate, CommandeUpdate, ListeCommande, ListeCommandeClient, RechercheArticleView, RechercheCommandeClientView, RechercheCommandeFournisseurView, UpdateCommandeClient, ajouter_article, delete_commande, delete_commande_client, delete_produit_client, delete_variant, liste_article_view, modifier_article_view, modifier_commande_fournisseur_view, nouvelle_commande_fournisseur_view, recuperer_article_view, recuperer_commande_fournisseur_view, recuperer_prix_article,stock_view,commande_fournisseur_view,commande_client_view, supprimer_article_view, supprimer_commande_fournisseur_view
+from gstock.views import CommandeClientCreate,CreerCommande, ListeCommande, ListeCommandeClient, ModifierCommande, RechercheArticleView, RechercheCommandeClientView, RechercheCommandeFournisseurView, UpdateCommandeClient, ajouter_article, delete_commande, delete_commande_client, delete_produit, delete_produit_client, liste_article_view, modifier_article_view, recuperer_article_view, recuperer_prix_article,stock_view,commande_client_view, supprimer_article_view
 
 app_name='stock'
 urlpatterns = [
@@ -21,11 +21,11 @@ urlpatterns = [
     #path('Nouvelle-commande/',nouvelle_commande_fournisseur_view, name='nouvelle-commande-fournisseur'),
    
     path('commande-fournisseur', ListeCommande.as_view(), name='liste_commande_fournisseur'), 
-    path('nouvelle-commande/', CommandeCreate.as_view(), name='create_commande'),
-    path('update/<int:pk>/', CommandeUpdate.as_view(), name='update_commande'),
-    path('delete-variant/<int:pk>/', delete_variant, name='delete_variant'),
+    path('nouvelle-commande/', CreerCommande.as_view(), name='create_commande'),
+    path('modifier-commande/<int:pk>/', ModifierCommande.as_view(), name='modifier_commande'),
+    path('delete-produit/<int:pk>/', delete_produit, name='delete_produit'),
     path('delete-commande/<int:pk>/', delete_commande, name='delete-commande-fournisseur'),
-    path('liste-commande/',RechercheCommandeFournisseurView.as_view(), name='recherche_commande_fournisseur'),
+    path('liste-commande-fournisseur/',RechercheCommandeFournisseurView.as_view(), name='recherche_commande_fournisseur'),
 
     
     # commande client
@@ -35,5 +35,5 @@ urlpatterns = [
     path('update-commande-client/<int:pk>/', UpdateCommandeClient.as_view(), name='update_commande_client'),
     path('delete-produit-client/<int:pk>/', delete_produit_client, name='delete_produit_client'),
     path('delete-commande-client/<int:pk>/', delete_commande_client, name='delete-commande-client'),
-    path('liste-commande/',RechercheCommandeClientView.as_view(), name='recherche_commande_client'),
+    path('liste-commande-client/',RechercheCommandeClientView.as_view(), name='recherche_commande_client'),
 ]

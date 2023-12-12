@@ -26,9 +26,9 @@
                     <ion-icon name="search-outline"></ion-icon>
                 </label>
             </div>
-            <a href="#" class="btn">
+            <!-- <a href="#" class="btn">
                 <>
-            </a>
+            </a> -->
             <!-- <div class="decon">
                  <form id="ajouterCommandeForm">
                     <button class="btn btn-primary" type="button" data-toggle="modal"
@@ -43,19 +43,20 @@
         </div>
 
         <div class="resultats_recherche">
-            {% include 'gstock/liste_commande_fournisseur.html' %}
+           
+             {% include 'gstock/liste_commande_fournisseur.html' %}
+            
         </div>
     </div>
 </div>
-</div>
-</div>
+
 
 
 <div class="decon">
     <!-- le popup d'ajout decommande fournisseur -->
     <div class="modal fade" id="ajouterCommandeModal" tabindex="-1" role="dialog"
         aria-labelledby="ajouterCommandeModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-lg " role="document" style="width:1000px;">
+        <div class="modal-dialog modal-lg " role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="ajouterCommandeModalLabel">Nouvelle commande</h5>
@@ -67,9 +68,7 @@
 
                 <div class="modal-body">
                     <!--  formulaire d'ajout de commande  -->
-                    <form class="container" method="post" id="product_form" action="{% url 'gstock:create_commande' %}"
-                        enctype="multipart/form-data">
-
+                    <form class="container" method="post" id="product_form" enctype="multipart/form-data">
                         {% csrf_token %}
 
                         <div class="row">
@@ -116,10 +115,10 @@
                         </div>
 
 
-                        {% with named_formsets.variants as formset %}
+                        {% with named_formsets.produits as formset %}
                         {{ formset.management_form }}
-                     <script type="text/html" id="variants-template"> 
-                      <tr id="variants-__prefix__" class= hide_all>
+                     <script type="text/html" id="produits-template">
+                      <tr id="produits-__prefix__" class= hide_all>
                         {% for fields in formset.empty_form.hidden_fields %}
                             {{ fields }}
                         {% endfor %}
@@ -140,17 +139,17 @@
                                     <th>Quantity <span style="color: red;" class="required">*</span></th>
                                     <th>Prix <span style="color: red;" class="required">*</span></th>
                                     <th>Montant <span style="color: red;" class="required">*</span></th>
-                                    <th>Delete?</th>
+
                                     <th>Action</th>
                                 </thead>
-                                <tbody id="item-variants"> <!-- id="item-inlineformsetname" -->
+                                <tbody id="item-produits"> <!-- id="item-inlineformsetname" -->
                                     <!-- formset non forms errors -->
                                     {% for error in formset.non_form_errors %}
                                     <span style="color: red">{{ error }}</span>
                                     {% endfor %}
                                     {% for formss in formset %}
                                     {{ formss.management_form }}
-                                    <tr id="variants-{{ forloop.counter0 }}" class=hide_all>
+                                    <tr id="produits-{{ forloop.counter0 }}" class=hide_all>
                                         <!-- id="inlineformsetname-counter" -->
                                         {{ formss.id }}
                                         {% for field in formss.visible_fields %}
@@ -167,7 +166,8 @@
                                         {% comment %} for delete {% endcomment %}
                                         {% if formss.instance.pk %}
                                         <td>
-                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                            <button type="button" id="exampleModal{{formss.instance.pk}}"
+                                                class="btn btn-danger" data-toggle="modal"
                                                 data-target="#exampleModal{{formss.instance.pk}}">
                                                 Supprimer
                                             </button>
@@ -180,34 +180,51 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title"
-                                                                id="exampleModalLabel{{formss.instance.pk}}">Are Your
-                                                                voulez vous supprimer ?</h5>
+                                                                id="exampleModalLabel{{formss.instance.pk}}">
+                                                                voulez vous vraiment supprimer ?</h5>
                                                             <button type="button" class="close" data-dismiss="modal"
                                                                 aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <a href="{% url 'gstock:delete_variant' formss.instance.pk %}"
-                                                                type="button" class="btn btn-primary">confirmer</a>
+                                                            <a href="{% url 'gstock:delete_produit' formss.instance.pk %}"
+                                                                type="button" class="btn btn-primary">oui, supprimer</a>
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-dismiss="modal">Fermer</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', () => {
+                                                    const supprimerLigneCommande = document.getElementById('#exampleModal{{formss.instance.pk}}');
+                                                    const closeButtonSupprimerLigneCommande = document.querySelector('#exampleModal{{formss.instance.pk}} .close');
+                                                    supprimerLigneCommande.addEventListener('click', () => {
+                                                        console.log("btn supp cliqué")
+                                                        $('#exampleModal{{formss.instance.pk}}').modal('show');
+                                                    });
+
+                                                    closeButtonSupprimerLigneCommande.addEventListener('click', () => {
+                                                        $('#exampleModal{{formss.instance.pk}}').modal('hide');
+                                                    });
+
+                                                });
+                                            </script>
                                         </td>
+
+
                                         {% endif %}
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
-                            <a href="#" id="add-variant-button" class="btn btn-primary add-variants">Autre produit</a>
+                            <a href="#" id="add-produit-button" class="btn btn-primary add-produits">Autre produit</a>
                             <!-- id="add-inlineformsetname-button" -->
                         </div>
 
                         {% endwith %}
-                        
+
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-block">Valider</button>
@@ -229,17 +246,14 @@
         const closeButton = document.querySelector('#ajouterCommandeModal .close');
 
         // ajouterCommandeForm.addEventListener('click', () => {
-           
         //     $('#ajouterCommandeModal').modal('show');
         // });
 
         closeButton.addEventListener('click', () => {
             $('#ajouterCommandeModal').modal('hide');
         });
+
     });
-
-
-    
 
 </script>
 
@@ -251,21 +265,21 @@
      le bouton autre produit  -->
 <script>
 
-$(document).ready(function () {
-    // when user clicks add more btn of variants
-    $('.add-variants').click(function (ev) {
+    $(document).ready(function () {
+        // when user clicks add more btn of produits
+        $('.add-produits').click(function (ev) {
 
-        ev.preventDefault();
-        var count = $('#item-variants').children().length;
-        var tmplMarkup = $('#variants-template').html();
-        var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
-        $('#item-variants').append(compiledTmpl);
-        console.log($('#item-variants').append(compiledTmpl))
-        // update form count
-        $('#id_variants-TOTAL_FORMS').attr('value', count + 1);
-        console.log(count)
+            ev.preventDefault();
+            var count = $('#item-produits').children().length;
+            var tmplMarkup = $('#produits-template').html();
+            var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+            $('#item-produits').append(compiledTmpl);
+            console.log($('#item-produits').append(compiledTmpl))
+            // update form count
+            $('#id_produits-TOTAL_FORMS').attr('value', count + 1);
+            console.log(count)
+        });
     });
-});
 
 
 </script>
@@ -307,11 +321,11 @@ l'affichage du modal d'ajout de commande fournisseur ,  cette valeur provient de
             if (typeof $().modal === 'function') {
                 // Utilisez Bootstrap pour afficher le modal
                 $(modal).modal('show');
-                
+
             } else {
                 // Si Bootstrap n'est pas disponible, vous pouvez simplement afficher le modal
                 modal.style.display = 'block';
-                
+
             }
         }
     });

@@ -90,11 +90,15 @@ class CommandeFournisseurForm(forms.ModelForm):
         fields = ['fournisseur', 'date_commande', 'reference']
         widgets = {
             'fournisseur': forms.Select(attrs={'class': 'select2 form-control','label':''}),
-            'date_commande': forms.DateInput(attrs={'type': 'date', 'class': 'form-control','label':''}),
+            'date_commande': forms.DateInput(attrs={'type': 'date', 'class': 'form-control','label':'','format': '%Y/%m/%d'}),
             'reference': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Réference','label':''}),
             
         }
         
+    
+        
+
+
 
 class LigneCommandeForm(forms.ModelForm):
     class Meta:
@@ -131,10 +135,10 @@ class LigneCommandeClientForm(forms.ModelForm):
             'montant': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'readonly': 'readonly'}),
         }
         
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Définissez la valeur par défaut pour le champ produit_id ici
-        self.fields['produit'].initial = Produit.objects.get(pk=1)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #      Définissez la valeur par défaut pour le champ produit_id ici
+    #      self.fields['produit'].initial = Produit.objects.get(pk=1)
         
         
         

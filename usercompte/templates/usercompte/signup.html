@@ -10,8 +10,9 @@
    <div class="bloc-inscription text-center">
     
         <img class="bloc-inscription-img" src="{% static 'usercompte/img/user5.jpg' %}" height="100px" width="100px" alt="profil">
-        <div class="mb-1 text-light"> {{message}} </div>
-        
+        <!-- <div class="mb-1 text-light"> {{message}} </div> -->
+        <h5 style="background-color: white; width: 75%; margin-left: 50px;" class=" message-erreur "><span style="color: red;">{{message}}</span>  </h5>
+
         <form method="POST" action="{% url 'usercompte:inscription' %}" > 
             {% csrf_token %}
             
@@ -19,7 +20,7 @@
             <div class="col-md-15 sm ">
                 <div class="input-group mb-3">
                      <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i> </span>
-                     <input type="text" name="username" class="form-control" placeholder="Username">
+                     <input type="text" name="username" class="form-control" placeholder="Username" required>
                      <!-- {{ form.as_p}} -->
                   </div>
 
@@ -30,7 +31,7 @@
 
               <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-key "></i> </span>
-                <input  type="password" name="password1"class="form-control" placeholder="********">
+                <input  type="password" name="password1"class="form-control" placeholder="********" required>
              </div>
 
              <div class="input-group mb-3">
