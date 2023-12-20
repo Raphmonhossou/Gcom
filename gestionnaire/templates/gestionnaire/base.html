@@ -21,7 +21,7 @@
 <body>
 
     <!-- =============== Navigation ================ -->
-    <div class="containeur">
+    <div class="">
         <div class="navigation">
             <ul>
                 <li>
@@ -66,29 +66,11 @@
                         <span class="icon">
                             <ion-icon name="cart-outline"></ion-icon>
                         </span>
-                        <span class="title">Achat</span>
+                        <span class="title">Commande</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'gstock:liste_commande_client' %}">
-                        
-                        <span class="icon">
-                            <ion-icon name="cart-outline"></ion-icon>
-                        </span>
-                        <span class="title">Vente</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{% url 'gstock:stock' %}">
-                        <span class="icon">
-                            <ion-icon name="list-outline"></ion-icon>
-                        </span>
-                        <span class="title">Stock</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{% url 'gstock:liste-commande-client' %}">
                         <span class="icon">
                             <ion-icon name="cash-outline"></ion-icon>
                         </span>
@@ -96,7 +78,17 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{% url 'gstock:stock' %}">
+                        <span class="icon">
+                            <i class="fas fa-box"></i>
+                        </span>
+                        <span class="title">Stock</span>
+                    </a>
+                </li>
                 
+
+
                 <li>
                     <a href="{% url 'paramettre:parametre' %}">
                         <span class="icon">
@@ -105,8 +97,14 @@
                         <span class="title">Paramètre</span>
                     </a>
                 </li>
-
-
+                <li>
+                    <a href="{% url 'usercompte:deconnexion' %}">
+                        <span class="icon">
+                            <i class="fas fa-sign-out-alt"></i> 
+                        </span>
+                        <span class="title">Déconnexion</span>
+                    </a>
+                </li>
 
             </ul>
         </div>

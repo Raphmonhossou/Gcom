@@ -146,6 +146,6 @@ LigneCommandeFormSet = forms.inlineformset_factory(CommandeFournisseur, LigneCom
     #     return formatted_date_commande
     
     
-     {% load django_bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
+    # {% load django_bootstrap5 %}
+    # {% bootstrap_css %}
+    # {% bootstrap_javascript %}

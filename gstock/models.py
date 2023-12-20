@@ -8,7 +8,8 @@ from contact.models import Contact
 class FamilleProduit(models.Model):
     libele = models.CharField(max_length=100, verbose_name='Libéllé de la famille de Produit')
     description = models.TextField(blank=True, null=True, verbose_name='Description')
-    
+    code = models.CharField(max_length=100, verbose_name='code')
+
     def __str__(self):
         return self.libele
 
@@ -32,7 +33,7 @@ class GroupeTaxe(models.Model):
         verbose_name_plural = 'Groupes de Taxes'
 
 class UniteMesure(models.Model):
-    libele = models.CharField(max_length=100, verbose_name='Libéllé de l\'unité de mesure')
+    libele = models.CharField(max_length=100, verbose_name='Libéllé ')
     description = models.TextField(blank=True, null=True, verbose_name='Description')
 
     class Meta:
@@ -47,11 +48,11 @@ class Produit(models.Model):
     libele = models.CharField(max_length=255, verbose_name='Libellé')
     code = models.CharField(max_length=50, unique=True, verbose_name='Code')
     description = models.TextField(blank=True, null=True,verbose_name='Description')
-    prix = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Prix')
-    quantite = models.PositiveIntegerField(verbose_name='Quantité en Stock')
+    prix_vente = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Prix')
+    quantite = models.PositiveIntegerField(verbose_name='Stock disponible')
     famille = models.ForeignKey(FamilleProduit, on_delete=models.CASCADE, verbose_name='Famille')
-    cout_achat = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Coût d\'Achat')
-    fournisseur = models.ForeignKey(Contact, on_delete=models.CASCADE, verbose_name='Fournisseur',limit_choices_to={'categorie': 'Fournisseur'})
+    prix_achat = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Coût d\'Achat')
+    #fournisseur = models.ForeignKey(Contact, on_delete=models.CASCADE, verbose_name='Fournisseur',limit_choices_to={'categorie': 'Fournisseur'})
     niveau_alerte_stock = models.PositiveIntegerField(verbose_name='Niveau d\'Alerte de Stock')
     unite_mesure = models.ForeignKey(UniteMesure, on_delete=models.CASCADE, verbose_name='Unité de Mesure')
     groupe_taxe = models.ForeignKey(GroupeTaxe, on_delete=models.CASCADE, verbose_name='Groupe de Taxes')
@@ -79,9 +80,10 @@ class CommandeFournisseur(models.Model):
 
     fournisseur = models.ForeignKey(Contact, on_delete=models.CASCADE, verbose_name='Fournisseur',limit_choices_to={'categorie': 'Fournisseur'})
     date_commande = models.DateField(verbose_name='Date')
-    produits = models.ManyToManyField('Produit', through='LigneCommande', verbose_name='Produits')
+    produits = models.ManyToManyField('Produit',through='LigneCommande', verbose_name='Produits')
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='En cours', verbose_name='Statut de la Commande')
     reference = models.CharField(max_length=100, verbose_name='Reference')
+    montant = models.DecimalField(max_digits=20, null=True,blank=True,decimal_places=2, verbose_name='Montant')
     date_reception = models.DateField(null=True, blank=True, verbose_name='Date de Réception')
 
     def __str__(self):
@@ -92,16 +94,16 @@ class CommandeFournisseur(models.Model):
 
 class LigneCommande(models.Model):
     commande = models.ForeignKey(CommandeFournisseur, on_delete=models.CASCADE, verbose_name='Commande Fournisseur')
-    produit = models.ForeignKey('Produit', on_delete=models.CASCADE, verbose_name='Produit')
-    quantite = models.PositiveIntegerField(verbose_name='Quantité')
-    prix_unitaire = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Prix Unitaire')
-    montant = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Montant TTC')
+    produit = models.ForeignKey('Produit',null=True,blank=True, on_delete=models.CASCADE, verbose_name='Produit')
+    prix_achat = models.DecimalField(max_digits=10,null=True,blank=True, decimal_places=2, verbose_name='Prix d\'achat')
+    quantite = models.PositiveIntegerField(null=True,blank=True,verbose_name='Quantité')
+    montant = models.DecimalField(max_digits=10, null=True,blank=True,decimal_places=2, verbose_name='Montant')
 
     def __str__(self):
         return f"{self.commande} - {self.produit.libele} ({self.quantite} )"
 
     class Meta:
-        verbose_name_plural = 'Lignes de Commande'
+        verbose_name_plural = 'Lignes de Commande fournisseur'
 
 
 
@@ -110,17 +112,18 @@ class CommandeClient(models.Model):
     
     STATUT_CHOICES = [
         
-        ('en_cours', 'En cours'),
-        ('livree', 'Livré'),
+        ('en_cours', 'En Cours'),
+        ('recue', 'Reçue'),
         ('annulee', 'Annulée'),
     ]
 
     client = models.ForeignKey(Contact, on_delete=models.CASCADE, verbose_name='Client',limit_choices_to={'categorie': 'Client'})
-    date_commande = models.DateField(verbose_name='Date de Commande')
-    produits = models.ManyToManyField('Produit', through='LigneCommandeClient', verbose_name='Produits')
+    date_commande = models.DateField(verbose_name='Date')
+    produits = models.ManyToManyField('Produit',through='LigneCommandeClient', verbose_name='Produits')
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='En cours', verbose_name='Statut de la Commande')
     reference = models.CharField(max_length=100, verbose_name='Reference')
-    date_livraison = models.DateField(null=True, blank=True, verbose_name='Date de Réception')
+    montant = models.DecimalField(max_digits=20, null=True,blank=True,decimal_places=2, verbose_name='Montant')
+    date_livraison = models.DateField(null=True, blank=True, verbose_name='Date de Livraison')
 
     def __str__(self):
         return f"Commande #{self.id} - Client: {self.client.name}"
@@ -129,15 +132,15 @@ class CommandeClient(models.Model):
         verbose_name_plural = 'Commandes Clients'
 
 class LigneCommandeClient(models.Model):
-    commande_client = models.ForeignKey(CommandeClient, on_delete=models.CASCADE, verbose_name='Commande Client')
-    produit = models.ForeignKey('Produit', on_delete=models.CASCADE, verbose_name='Produit')
-    quantite = models.PositiveIntegerField(verbose_name='Quantité')
-    prix_vente = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Prix de vente')
-    montant = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Montant TTC')
+    commande = models.ForeignKey(CommandeClient, on_delete=models.CASCADE, verbose_name='Commande Client')
+    produit = models.ForeignKey('Produit',null=True,blank=True, on_delete=models.CASCADE, verbose_name='Produit')
+    prix_vente = models.DecimalField(max_digits=10,null=True,blank=True, decimal_places=2, verbose_name='Prix de vente')
+    quantite = models.PositiveIntegerField(null=True,blank=True,verbose_name='Quantité')
+    montant = models.DecimalField(max_digits=10, null=True,blank=True,decimal_places=2, verbose_name='Montant')
 
     def __str__(self):
-        return f"{self.commande_client} - {self.produit.libele} ({self.quantite})"
+        return f"{self.commande} - {self.produit.libele} ({self.quantite} )"
 
     class Meta:
-        verbose_name_plural = 'Lignes de commande client'
+        verbose_name_plural = 'Lignes de Commande client'
 

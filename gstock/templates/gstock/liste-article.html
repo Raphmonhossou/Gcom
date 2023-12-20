@@ -77,11 +77,18 @@
                     <form method="post" action="{% url 'gstock:ajouter-article' %}" enctype="multipart/form-data">
                         {% csrf_token %}
 
-                        <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{ form.famille.label_tag }} </div>
+                            {{ form.famille }}
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{ form.code.label_tag }} </div>
                             {{ form.code }}
 
                         </div>
-                        <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{form.libele.label_tag }} </div>
                             {{ form.libele }}
                         </div>
 
@@ -90,32 +97,27 @@
                             {{ form.description }}
 
                         </div>
-                        <div class=" input-group mb-3">
-                            <div class="input-group-text">{{ form.famille.label_tag }} </div>
-                            {{ form.famille }}
-                        </div>
-
-                        <div class=" input-group mb-3">
-                            <div class="input-group-text">  {{ form.fournisseur.label_tag }} </div>
-                            {{ form.fournisseur }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form.cout_achat }}
+                       
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{form.prix_achat.label_tag }} </div>
+                            {{ form.prix_achat }}
 
                         </div>
-                        <div class="mb-3">
-                            {{ form.prix }}
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{form.prix_vente.label_tag }} </div>
+                            {{ form.prix_vente }}
 
                         </div>
                         
                        
-                        <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{form.quantite.label_tag }} </div>
                             {{ form.quantite }}
 
                         </div>
                         
-                        <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{form.niveau_alerte_stock.label_tag }} </div>
                             {{ form.niveau_alerte_stock }}
 
                         </div>
@@ -140,9 +142,6 @@
                            
 
                         </div>
-
-                       
-
 
                         <div class="mb-3">
                             {{ form.image }}
@@ -180,11 +179,13 @@
                         {% csrf_token %}
                         <input type="hidden" name="article_id" id="article_id" value="{{ form.instance.id }}">
 
-                        <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{ form.code.label_tag }} </div>
                             {{ form.code }}
 
                         </div>
-                        <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{ form.libele.label_tag }} </div>
                             {{ form.libele }}
                         </div>
                         <div class="mb-3">
@@ -197,25 +198,26 @@
                         </div>
                         
                         
-                        <div class=" input-group mb-3">
-                            <div class="input-group-text">  {{ form.fournisseur.label_tag }} </div>
-                            {{ form.fournisseur }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form.cout_achat }}
+                        
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{ form.prix_achat.label_tag }} </div>
+                            {{ form.prix_achat }}
 
                         </div>
-                        <div class="mb-3">
-                            {{ form.prix }}
+                        <div class="input-group mb-3"> 
+                          <div class="input-group-text">{{ form.prix_vente.label_tag }} </div>
+                            {{ form.prix_vente }}
 
                         </div>
                        
-                        <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{ form.quantite.label_tag }} </div>
                             {{ form.quantite }}
 
                         </div>
                         
-                        <div class="mb-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">{{ form.niveau_alerte_stock.label_tag }} </div>
                             {{ form.niveau_alerte_stock }}
 
                         </div>
@@ -223,7 +225,7 @@
 
                         
                         <div class=" input-group mb-3">
-                            <div class="input-group-text">  {{ form.unite_mesure.label_label_tag }} </div>
+                            <div class="input-group-text">  {{ form.unite_mesure.label_tag }} </div>
                             {{ form.unite_mesure }}
                         </div>
                       
@@ -257,7 +259,9 @@
         const closeButton1 = document.querySelector('#modifierArticleModal .close');
 
         ajouterArticleForm.addEventListener('click', () => {
+            
             $('#ajouterArticleModal').modal('show');
+
         });
 
         closeButton.addEventListener('click', () => {

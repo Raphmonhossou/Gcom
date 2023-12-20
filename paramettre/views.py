@@ -17,11 +17,12 @@ def famille_produit(request):
                form.save()  
                famille = FamilleProduit.objects.all()
                nbr = famille.count()
+               form = FamilleForm() # vider le formulaire
                context = {'ajouter_reussi': True,'famille': famille,'nbr':nbr,'form': form}
                return render (request,'paramettre/famille-produit.html', context)
        
     else:
-        print('post ici else')
+       
         form = FamilleForm()
 
     famille = FamilleProduit.objects.all()
@@ -37,6 +38,7 @@ def unite_mesure(request):
                form.save()  
                unite = UniteMesure.objects.all()
                nbr = unite.count()
+               form = UniteMesureForm() #vider
                context = {'ajouter_reussi': True,'unite': unite,'nbr':nbr,'form': form}
                return render (request,'paramettre/unite-mesure.html', context)
                
@@ -60,6 +62,7 @@ def groupe_taxe(request):
                 form.save()               
                 taxe = GroupeTaxe.objects.all()
                 nbr = GroupeTaxe.objects.count()
+                form = GroupeTaxeForm()
                 context = {'ajouter_reussi': True,'taxe': taxe,'nbr':nbr,'form': form}
                 return render (request,'paramettre/groupe-taxe.html',context)
         

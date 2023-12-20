@@ -94,7 +94,7 @@ body {
 .navigation ul li:hover,
 .navigation ul li.hovered {
   background-color: var(--white);
-}
+} 
 
 .navigation ul li:nth-child(1) {
   margin-bottom: 40px;
@@ -386,6 +386,12 @@ list-style-type: none;
  
   /* position: relative; */
 }
+.scrol-table{
+  overflow: auto;
+  min-height: 170px;
+  max-height: 400px;
+ 
+}
 
 .listeclient .cardHeader {
   display: flex;
@@ -475,6 +481,25 @@ list-style-type: none;
   
 }
 
+/* --------------------------------gstock -----------------*/
+.containeurc {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    background-color: #f5f5f5;
+    box-shadow: 2px 2px 5px #888888;
+    margin-top: 50px;
+}
+
+
+
+
+.cadre-detail{
+  position: relative;
+  margin: 50px;
+  margin-left: 100px;
+}
 /* --------------------------------paramettre -----------------*/
 
 

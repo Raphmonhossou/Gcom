@@ -19,8 +19,9 @@
                 <th scope="col">code</th>
                 <th scope="col">Libellé</th>
                 <th scope="col">Famille</th>
-                <th scope="col">Prix HT</th>
-                <th scope="col">Prix TTC</th>
+                <th scope="col">Prix d'achat</th>
+                <th scope="col">Prix de vente</th>
+                <th scope="col">Stock</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -32,8 +33,9 @@
                 <td>{{produit.code}}</td>
                 <td>{{produit.libele}}</td>
                 <td>{{produit.famille}}</td>
-                <td>{{produit.prix}}</td>
-                <td>{{prix_ht}}</td>
+                <td>{{produit.prix_achat}}</td>
+                <td>{{produit.prix_vente}}</td>
+                <td>{{produit.quantite}}</td>
                 <td>
                   <!-- <div >
                     <a class=" " href="{% url 'stock:recuperer-article' produit.id %}">Modifier</a>

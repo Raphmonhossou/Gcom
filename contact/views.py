@@ -28,10 +28,11 @@ def ajouter_contact_view(request):
           form = ContactForm(request.POST)
           if form.is_valid():
               form.save()  
-                  
+              form = ContactForm()   
               if calling_page=="/contact/":
                 contacts = Contact.objects.all()
                 nbr = contacts.count()
+                
                 context = {'ajout_reussi': True,'contacts': contacts,'nbr':nbr,'form': form}
                 return render(request,'contact/liste-contact.html',context)
                 
@@ -93,6 +94,7 @@ def liste_client_view(request):
           form = ContactForm(request.POST)
           if form.is_valid():
                 form.save()  
+                form = ContactForm()
                 contacts_clients = Contact.objects.filter(categorie='Client')
                 nbr =  Contact.objects.filter(categorie='Client').count()
                 context = {'traitement_reussi': True,'contacts_clients': contacts_clients,'nbr':nbr,'form': form}
@@ -123,7 +125,8 @@ def liste_prospect_view(request):
 
           form = ContactForm(request.POST)
           if form.is_valid():
-                form.save()  
+                form.save() 
+                form = ContactForm() 
                 contacts_prospects = Contact.objects.filter(categorie='Prospect')
                 nbr = Contact.objects.filter(categorie='Prospect').count()
                 context = {'traitement_reussi': True,'contacts_clients': contacts_prospects,'nbr':nbr,'form': form}
@@ -154,7 +157,8 @@ def liste_fournisseur_view(request):
        
           form = ContactForm(request.POST)
           if form.is_valid():
-                form.save()  
+                form.save() 
+                form = ContactForm() 
                 contacts_fournisseurs = Contact.objects.filter(categorie='Fournisseur')
                 nbr = Contact.objects.filter(categorie='Fournisseur').count()
                 context = {'traitement_reussi': True,'contacts_clients': contacts_fournisseurs,'nbr':nbr,'form': form}
@@ -186,6 +190,7 @@ def liste_societe_view(request):
           form = ContactForm(request.POST)
           if form.is_valid():
                 form.save()  
+                form = ContactForm()
                 contacts_societes = Contact.objects.filter(type='Societe')
                 nbr =  Contact.objects.filter(type='Societe').count()
                 context = {'traitement_reussi': True,'contacts_societes': contacts_societes,'nbr':nbr,'form': form}
@@ -216,6 +221,7 @@ def liste_particulier_view(request):
           form = ContactForm(request.POST)
           if form.is_valid():
                 form.save()  
+                form = ContactForm()
                 contacts_particuliers = Contact.objects.filter(type='Particulier')
                 nbr = Contact.objects.filter(type='Particulier').count()
                 context = {'contacts_particuliers': contacts_particuliers,'nbr':nbr,'form': form}

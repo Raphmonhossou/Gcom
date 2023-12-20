@@ -19,9 +19,9 @@
                 <th scope="col">Date</th>
                 <th scope="col">Reférence</th>
                 <th scope="col">Fourniseur</th>
-                <th scope="col">Montant TTC</th>
+                <th scope="col">Montant</th>
                 <th scope="col">Statut</th>
-                <th scope="col">Date de reception</th>
+                <!-- <th scope="col">Date de reception</th> -->
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -35,24 +35,21 @@
                 <td>{{commande.fournisseur}}</td>
                 <td>{{commande.montant}}</td>
                 <td>{{commande.statut}}</td>
-                <td>{{commande.date_reception}}</td>
+                <!-- <td>{{commande.date_reception}}</td> -->
                 <td>
-                    <!-- <div class="btn-action">
-                        <a class="dropdown-item" href="{% url 'stock:modifier_commande' commande.id %}">Modifier</a>
-                      
-                    </div> -->
+                    
 
                     <div class="dropdown">
                         <a class="btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                          Actions
                         </a>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item text-bg-warning" href="{% url 'stock:modifier_commande' commande.id %}">Modifier</a></li>
+                          <li><a class="dropdown-item text-bg-warning" href="{% url 'gstock:recuperer-commande-fournisseur' commande.id %}">Modifier</a></li>
                           <li><a class="dropdown-item text-bg-danger" href="javascript:void(0);"onclick="confirmerSuppression('{% url 'stock:delete-commande-fournisseur' commande.id %}')">Supprimer</a></li>
-                          <li><button type="button" id="btnDetail" class=" dropdown-item text-bg-success btn ">Détails</button></li>
+                          <li><a class="dropdown-item  text-bg-success" href="{% url 'gstock:detail-commande-fournisseur' commande.id %}">Détails</a></li>
                         </ul>
                       </div>
-
+                     
                 </td>
               </tr>
                 

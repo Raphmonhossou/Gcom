@@ -40,6 +40,7 @@
                     <thead>
                         <tr>
 
+                            <th scope="col">code</th>
                             <th scope="col">libellé</th>
                             <th scope="col">description</th>
 
@@ -51,7 +52,7 @@
 
                         {% for famille in famille %}
                         <tr>
-
+                            <td>{{famille.code}}</td>
                             <td>{{famille.libele}}</td>
                             <td>{{famille.description}}</td>
 
@@ -103,6 +104,9 @@
 
                     <div class="row mb-3">
                         {{ form.libele }}
+                    </div>
+                    <div class="row mb-3">
+                        {{ form.code }}
                     </div>
                     <div class="row mb-3">
                         {{ form.description }}

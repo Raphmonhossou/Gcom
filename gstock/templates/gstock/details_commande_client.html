@@ -1,0 +1,67 @@
+{% extends 'gestionnaire/base.html' %}
+{% load static %}
+
+{% block titre %}
+<h1>Gestion commerciale</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="row ">
+    <div class="col-sm-6 mb-3 mb-sm-0">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Client</h5>
+          <p class="card-text">Nom: {{commande_client.client}}</p>
+          <p class="card-text">Téléphone : {{commande_client.client.phone}}</p>
+          <p class="card-text">Ifu : {{commande_client.client.ifu}}</p>
+          <p class="card-text">Adresse : {{commande_client.client.adress}}</p>
+          
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          
+          <h5 class="card-title">Facture</h5>
+          <p class="card-text">N° : {{commande_client.reference}}</p> 
+          <p class="card-text">date : {{commande_client.date_commande}}</p>    
+           
+        </div>
+      </div>
+    </div>
+</div>
+
+ <div class="row listeclient scrol-table">
+ <table  >
+    <thead>
+        <tr>
+            <th>N°</th>
+            <th>Produit</th>
+            <th>Prix de vente</th>
+            <th>Quantité</th>
+            <th>Montant</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        {% for  ligne in ligne_commande %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ligne.produit}}</td>
+            <td>{{ligne.prix_vente}}</td>
+            <td>{{ligne.quantite}}</td>
+            <td>{{ligne.montant}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+ </table>  
+</div>
+
+
+
+
+
+
+{% endblock %}

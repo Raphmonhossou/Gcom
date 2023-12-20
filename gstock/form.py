@@ -13,7 +13,9 @@ class FamilleForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'libele': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Libellé' }),
+            'code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Code' }),
             'description': forms.Textarea(attrs={'class': 'form-control','rows':3, 'placeholder': 'Description'}),
+
             }
 
 
@@ -35,7 +37,7 @@ class GroupeTaxeForm(forms.ModelForm):
         widgets = {
             'libele': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Libellé'}),
             'taux': forms.NumberInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Description'}),
+            'description': forms.Textarea(attrs={'class': 'form-control','rows':3, 'placeholder': 'Description'}),
             'code_fiscal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Code fiscal'}),
             'exoneration': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'statut': forms.Select(attrs={'class': 'form-control'}),
@@ -52,11 +54,11 @@ class ProduitForm(forms.ModelForm):
             'libele': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Libellé'}),
             'code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Code'}),
             'description': forms.Textarea(attrs={'class': 'form-control','rows':3, 'placeholder': 'Description'}),
-            'cout_achat': forms.NumberInput(attrs={'class': 'form-control','min': '0', 'placeholder': 'Coût d\'Achat'}),
-            'prix': forms.NumberInput(attrs={'class': 'form-control', 'min': '0','placeholder': 'prix de vente'}),
+            'prix_achat': forms.NumberInput(attrs={'class': 'form-control','min': '0', 'placeholder': 'Prix d\'Achat'}),
+            'prix_vente': forms.NumberInput(attrs={'class': 'form-control', 'min': '0','placeholder': 'prix de vente'}),
             'quantite': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Quantité en Stock'}),
             'famille': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Famille'}),
-            'fournisseur': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Fournisseur'}),
+            # 'fournisseur': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Fournisseur'}),
             'unite_mesure': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Unité de Mesure'}),
             'groupe_taxe': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Groupe de Taxes'}),
             'date_peremption': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'Date de Péremption'}),
@@ -83,7 +85,7 @@ class ProduitForm(forms.ModelForm):
 #         }
 
 class CommandeFournisseurForm(forms.ModelForm):
-    
+
     class Meta:
         model = CommandeFournisseur
         # fields = '__all__'
@@ -92,9 +94,9 @@ class CommandeFournisseurForm(forms.ModelForm):
             'fournisseur': forms.Select(attrs={'class': 'select2 form-control','label':''}),
             'date_commande': forms.DateInput(attrs={'type': 'date', 'class': 'form-control','label':'','format': '%Y/%m/%d'}),
             'reference': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Réference','label':''}),
-            
+           
         }
-        
+    lignes_commande_data = forms.JSONField(widget=forms.HiddenInput(), required=False) #ce champ caché contiendra ligne de commande du tableau    
     
         
 
@@ -103,46 +105,48 @@ class CommandeFournisseurForm(forms.ModelForm):
 class LigneCommandeForm(forms.ModelForm):
     class Meta:
         model = LigneCommande
-        fields = ['commande','produit', 'quantite', 'prix_unitaire', 'montant']
+        fields = ['commande','produit','prix_achat','quantite', 'montant']
         widgets = {
+            'commande': forms.Select(attrs={'class': 'select2 form-control'}),
             'produit': forms.Select(attrs={'class': 'select2 form-control'}),
-            'quantite': forms.NumberInput(attrs={'class': 'form-control'}),
-            'prix_unitaire': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-            'montant': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'prix_achat': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'quantite': forms.NumberInput(attrs={'class': 'form-control','min':'1','step':'1'}),
+            'montant': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'readonly':True}),
         }
         
-        
 class CommandeClientForm(forms.ModelForm):
+
     class Meta:
         model = CommandeClient
         # fields = '__all__'
         fields = ['client', 'date_commande', 'reference']
         widgets = {
             'client': forms.Select(attrs={'class': 'select2 form-control','label':''}),
-            'date_commande': forms.DateInput(attrs={'type': 'date', 'class': 'form-control','label':''}),
+            'date_commande': forms.DateInput(attrs={'type': 'date', 'class': 'form-control','label':'','format': '%Y/%m/%d'}),
             'reference': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Réference','label':''}),
-            
+           
         }
+    lignes_commande_data = forms.JSONField(widget=forms.HiddenInput(), required=False) #ce champ caché contiendra ligne de commande du tableau    
+    
+        
+
+
 
 class LigneCommandeClientForm(forms.ModelForm):
     class Meta:
         model = LigneCommandeClient
-        fields = ['commande_client','produit', 'quantite', 'prix_vente', 'montant']
+        fields = ['commande','produit','prix_vente','quantite', 'montant']
         widgets = {
+            'commande': forms.Select(attrs={'class': 'select2 form-control'}),
             'produit': forms.Select(attrs={'class': 'select2 form-control'}),
-            'quantite': forms.NumberInput(attrs={'class': 'form-control'}),
-            'prix_vente': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'readonly': 'readonly'}),
-            'montant': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'readonly': 'readonly'}),
+            'prix_vente': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'quantite': forms.NumberInput(attrs={'class': 'form-control','min':'1','step':'1'}),
+            'montant': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'readonly':True}),
         }
-        
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #      Définissez la valeur par défaut pour le champ produit_id ici
-    #      self.fields['produit'].initial = Produit.objects.get(pk=1)
+
         
         
         
         
-        
-LigneCommandeFormSet = inlineformset_factory(CommandeFournisseur, LigneCommande, form =LigneCommandeForm,extra=1, can_delete=True, can_delete_extra=True)
-LigneCommandeClientFormSet = inlineformset_factory(CommandeClient, LigneCommandeClient, form =LigneCommandeClientForm,extra=1, can_delete=True, can_delete_extra=True)
+# LigneCommandeFormSet = inlineformset_factory(CommandeFournisseur, LigneCommande, form =LigneCommandeForm,extra=1, can_delete=True, can_delete_extra=True)
+# LigneCommandeClientFormSet = inlineformset_factory(CommandeClient, LigneCommandeClient, form =LigneCommandeClientForm,extra=1, can_delete=True, can_delete_extra=True)

@@ -1,0 +1,367 @@
+{% extends 'gestionnaire/base.html' %}
+{% load static %}
+
+{% block titre %}
+<h1>Gestion commerciale</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <form  id="formc" method="post" action="{% url 'gstock:nouvelle-commande-client' %}"
+        enctype="multipart/form-data">
+
+           <fieldset class="mt-1"  style="border: solid 0.5px;">
+
+           
+            <legend>Informations générales</legend>
+
+            {% csrf_token %}
+            <div class="row">
+
+                <div class="form-group col-md-4">
+
+                    <div class=" input-group mb-3">
+                        <div class="input-group-text"> {{ form.client.label_tag }}
+                            <span style="color: red;" class="required">*</span>
+                        </div>
+                        {{ form.client }}
+                        {% for error in form.errors %}
+                        <p style="color: red">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+                <div class="form-group col-md-4">
+                    <div class=" input-group mb-3">
+                        <div class="input-group-text"> {{ form.date_commande.label_tag }}
+                            <span style="color: red;" class="required">*</span>
+                        </div>
+                        {{ form.date_commande }}
+                        {% for error in form.errors %}
+                        <p style="color: red">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class=" input-group mb-3">
+                        <div class="input-group-text"> {{ form.reference.label_tag }}
+                            <span style="color: red;" class="required">*</span>
+                        </div>
+                        {{ form.reference }}
+                        {% for error in form.errors %}
+                        <p style="color: red">{{ error }}</p>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <div>
+                    {{ form.lignes_commande_data }}
+                </div>
+
+
+            </div>
+        </fieldset>
+
+        <fieldset class="mt-1"  style="border: solid 0.5px;">
+            <div>
+
+                <legend>Informations sur les articles</legend>
+
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                {{ ligne_form.produit.label_tag }}</div>
+                            {{ ligne_form.produit }}
+                            <span style="color: red">{{ ligne_form.errors }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                {{ ligne_form.prix_vente.label_tag }}</div>
+                            {{ ligne_form.prix_vente }}
+                            <span style="color: red">{{ ligne_form.errors }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                {{ ligne_form.quantite.label_tag }}</div>
+                            {{ ligne_form.quantite }}
+                            <span style="color: red">{{ ligne_form.errors }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                {{ ligne_form.montant.label_tag }}</div>
+                            {{ ligne_form.montant }}
+                            <span style="color: red">{{ ligne_form.errors }}</span>
+                        </div>
+                    </div>
+
+                    <div id="error-container" class="text-danger"></div>
+
+                </div>
+                <div class="row ">
+
+                    <div class="col-md-12 text-end">
+                        <button class="btn btn-primary  " type="button" onclick="ajouterAuTableau()">Ajouter</button>
+                        <button class="btn btn-danger  " type="button" onclick="AnnulerArticle()">Annuler</button>
+
+                    </div>
+                </div>
+
+            </div>
+        
+        </fieldset>
+
+        <div class="listeclient mt-1 scrol-table">
+
+            <table id="tableLignesCommande" style="border: 1px;">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Produit</th>
+                        <th>Prix de vente</th>
+                        <th>Quantité</th>
+                        <th>Montant</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Les lignes du tableau seront ajoutées ici -->
+                </tbody>
+
+            </table>
+        </div>
+
+
+        </fieldset>
+        <div class="row mb-5">
+            <button type="submit" class="btn btn-primary btn-block">Valider</button>
+        </div>
+
+    </form>
+
+</div>
+
+
+<script>
+    var errorMessages = [];
+    document.getElementById("formc").addEventListener("submit", function (event) {
+        // Récupérez les données du champ caché
+        var lignesCommandeData = JSON.parse(document.getElementById("id_lignes_commande_data").value);
+
+        // Vérifiez si lignesCommandeData n'est pas vide
+        if (lignesCommandeData.length === 0) {
+
+            errorMessages.push("veillez selectionner les articles.");
+            var errorContainer = document.getElementById("error-container");
+            errorContainer.innerHTML = ""; // Effacer les erreurs précédentes
+            errorContainer.innerHTML = errorMessages;
+
+            event.preventDefault();  // Empêche la soumission du formulaire
+        }
+    });
+
+</script>
+
+<script>
+    // Fonction appelée lors du changement de la valeur du champ produit
+    function miseAJourPrixMontant() {
+        // Récupérer la valeur sélectionnée dans le champ produit
+        var produitSelect = document.getElementById("id_produit");
+        var produitValue = produitSelect.value;
+
+
+
+        // Effectuer une requête Ajax pour récupérer les informations du produit depuis la base de données
+        $.ajax({
+            url: "{% url 'gstock:recuperer-prix-article' %}",
+            type: 'GET',
+            data: { 'produit': produitValue },
+
+            success: function (data) {
+                // Mettre à jour les champs prix_vente et montant avec les données récupérées
+                document.getElementById("id_prix_vente").value = data.prix_vente;
+
+                var quantiteValue = parseFloat(document.getElementById("id_quantite").value) || 1;
+
+                document.getElementById("id_quantite").value = quantiteValue; // valeur par defaut
+
+                var montantValue = quantiteValue * data.prix_vente;
+                document.getElementById("id_montant").value = montantValue.toFixed(2); // Pour arrondir à deux décimales
+
+            },
+            error: function (error) {
+                console.log("Erreur lors de la récupération des données du produit:", error);
+            }
+        });
+    }
+
+    // Attacher la fonction à l'événement de changement du champ produit
+    document.getElementById("id_produit").addEventListener("change", miseAJourPrixMontant);
+    document.getElementById("id_quantite").addEventListener("input", miseAJourPrixMontant);
+
+</script>
+
+
+
+
+
+
+<script>
+
+    function ajouterAuTableau() {
+
+        // Récupérer les valeurs du formulaire 
+        // les id sont les id generer par le form , on peut les voir en inspectant le code
+        var produitValue = document.getElementById("id_produit").value;
+        var prixVenteValue = document.getElementById("id_prix_vente").value;
+        var quantiteValue = document.getElementById("id_quantite").value;
+        var montantValue = document.getElementById("id_montant").value;
+
+
+        var errorMessages = [];
+        if (produitValue === "" & prixVenteValue === "" & quantiteValue === "" & montantValue === "") {
+            // alert("Veuillez remplir tous les champs avant d'ajouter au tableau.");
+            errorMessages.push("Veuillez remplir  les champs.");
+        } else if (produitValue === "") {
+            errorMessages.push("Selectionnez un produit.");
+        }
+
+        else if (prixVenteValue === "") {
+            errorMessages.push("Renseignez le Prix de vente.");
+        }
+
+        else if (quantiteValue === "") {
+            errorMessages.push("Renseignez la quantité.");
+        }
+
+        // Vérifier si le produit existe déjà dans le tableau
+        var tableau = document.getElementById("tableBody");
+        var rows = tableau.getElementsByTagName("tr");
+        if (rows.length >= 1) {
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName("td");
+                var existingProduit = cells[0].textContent; // Assurez-vous d'ajuster l'index en fonction de votre structure de tableau
+
+                if (existingProduit === produitValue) {
+                    errorMessages.push("Le produit existe déjà dans le tableau.");
+                    break; // Sortir de la boucle dès qu'un produit est trouvé
+                }
+            }
+        }
+
+
+        // Afficher les messages d'erreur à côté des champs vides
+        var errorContainer = document.getElementById("error-container");
+        errorContainer.innerHTML = ""; // Effacer les erreurs précédentes
+        errorContainer.innerHTML = errorMessages.join(" "); // Concaténer les messages avec un espace
+        if (errorMessages.length > 0) {
+            return;   //pour arreter l'execution de la fonction
+        }
+
+
+        //lancer une requette pour obtenir le nom du produit
+        $.ajax({
+            url: "{% url 'gstock:recuperer-prix-article' %}",
+            type: 'GET',
+            data: { 'produit': produitValue },
+
+            success: function (data) {
+
+                var libeleProduit = data.libele;
+
+                // Créer une nouvelle ligne pour le tableau
+                var newRow = document.createElement("tr");
+                // newRow.innerHTML ="<td>" + produitValue + "</td><td>" + libeleProduit + "</td> <td>"+prixVenteValue +"</td><td>" + quantiteValue + "</td><td>"+montantValue+"</td><td><button class='btn btn-warning' onclick='editerLigne(this)'>Modifier</button> <button class='btn btn-danger' onclick='supprimerLigne(this)'>Supprimer</button></td>";
+                newRow.innerHTML = "<td>" + produitValue + "</td><td>" + libeleProduit + "</td> <td>" + prixVenteValue + "</td><td>" + quantiteValue + "</td><td>" + montantValue + "<td>" + "<div class='dropdown p-0'><a class='btn btn-primary dropdown-toggle m-0' role='button' data-bs-toggle='dropdown' aria-expanded='false'> Actions</a><ul class='dropdown-menu p-0'><li><button class='dropdown-item btn text-bg-warning m-0' onclick='editerLigne(this)'>Modifier</button></li><li><button class='dropdown-item btn text-bg-danger' onclick='supprimerLigne(this)'>Supprimer</button></li></ul></div>" + "</td>";
+
+
+                // Ajouter la nouvelle ligne au tableau
+                document.getElementById("tableBody").appendChild(newRow);
+                mettreAJourChampLigneCommande();
+            },
+            error: function (error) {
+                console.log("Erreur lors de la récupération des données du produit:", error);
+            }
+        });
+
+
+
+        // Réinitialiser le formulaire
+        //document.getElementById("form_article").reset();
+        document.getElementById("id_montant").value = "";
+        document.getElementById("id_quantite").value = "";
+        document.getElementById("id_prix_vente").value = "";
+        document.getElementById("id_produit").value = "";
+
+
+    }
+
+    function AnnulerArticle() {
+        document.getElementById("id_montant").value = "";
+        document.getElementById("id_quantite").value = "";
+        document.getElementById("id_prix_vente").value = "";
+        document.getElementById("id_produit").value = "";
+    }
+
+    function mettreAJourChampLigneCommande() {
+        var tableau = document.getElementById("tableLignesCommande");
+        var lignesCommandeData = [];
+
+        // Parcourir chaque ligne du tableau
+        for (var i = 1; i < tableau.rows.length; i++) {
+            var row = tableau.rows[i];
+            var idProduit = row.cells[0].innerText;
+            var libeleProduit = row.cells[1].innerText;
+            var prixVente = row.cells[2].innerText;
+            var quantite = row.cells[3].innerText;
+            var montant = row.cells[4].innerText;
+            console.log(idProduit + " " + libeleProduit + " " + prixVente)
+            // Ajouter les données de la ligne à la liste
+            lignesCommandeData.push({
+                'id_produit': idProduit,
+                'id_libele': libeleProduit,
+                'prix_vente': prixVente,
+                'quantite': quantite,
+                'montant': montant
+            });
+        }
+
+        // Mettre à jour la valeur du champ caché avec les données JSON
+        document.getElementById("id_lignes_commande_data").value = JSON.stringify(lignesCommandeData);
+        console.log(lignesCommandeData)
+    }
+
+
+    function editerLigne(button) {
+        // obtenir la ligne cliquee
+        var row = button.closest('tr');
+        //obtenir les valeurs
+        document.getElementById("id_produit").value = row.cells[0].innerText;
+        document.getElementById("id_prix_vente").value = row.cells[2].innerText;
+        document.getElementById("id_quantite").value = row.cells[3].innerText;
+        document.getElementById("id_montant").value = row.cells[4].innerText;
+
+        // supprimer la ligne de la table
+        row.remove();
+    }
+
+    function supprimerLigne(button) {
+        // obtenir la ligne cliquee et supprimer
+        button.closest('tr').remove();
+    }
+
+</script>
+
+
+
+{% endblock %}

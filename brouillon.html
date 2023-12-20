@@ -411,3 +411,312 @@ document.addEventListener('DOMContentLoaded', () => {
                       <li><a class="dropdown-item text-bg-danger" href="{% url 'stock:supprimer-article' produit.id %}">Supprimer</a></li>
                     </ul>
                   </div> -->
+
+<!-- ===============================commande avec formset=============================== -->
+
+
+
+{% extends 'gestionnaire/base.html' %}
+{% load static %}
+
+{% block titre %}
+<h1>Gestion commerciale</h1>
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+<div class="decon">
+    <!-- le popup d'ajout decommande fournisseur -->
+    <div class="modal fade" id="ajouterCommandeModal" tabindex="-1" role="dialog"
+        aria-labelledby="ajouterCommandeModalLabel" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ajouterCommandeModalLabel">Nouvelle commande</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <!--  formulaire d'ajout de commande  -->
+                    <form class="container" method="post" id="product_form" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="form-group col-md-4">
+
+                                <div class=" input-group mb-3">
+                                    <div class="input-group-text"> {{ form.fournisseur.label_tag }}
+                                        <span style="color: red;" class="required">*</span>
+                                    </div>
+                                    {{ form.fournisseur }}
+                                    {% for error in form.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <div class=" input-group mb-3">
+                                    <div class="input-group-text"> {{ form.date_commande.label_tag }}
+                                        <span style="color: red;" class="required">*</span>
+                                    </div>
+                                    {{ form.date_commande }}
+                                    {% for error in form.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <div class=" input-group mb-3">
+                                    <div class="input-group-text"> {{ form.reference.label_tag }}
+                                        <span style="color: red;" class="required">*</span>
+                                    </div>
+                                    {{ form.reference }}
+                                    {% for error in form.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        {% with named_formsets.produits as formset %}
+                        {{ formset.management_form }}
+                     <script type="text/html" id="produits-template">
+                      <tr id="produits-__prefix__" class= hide_all>
+                        {% for fields in formset.empty_form.hidden_fields %}
+                            {{ fields }}
+                        {% endfor %}
+                    
+                        {% for fields in formset.empty_form.visible_fields %}
+                            <td>{{fields}}</td>
+                        {% endfor %}
+                      </tr>
+                     </script>
+
+                        <div class="table-responsive card mt-4">
+                            <div class="card-header card-header-secondary">
+                                <h5 class="card-title">Articles</h5>
+                            </div>
+                            <table class="table card-header">
+                                <thead class="text-secondary">
+                                    <th>Article <span style="color: red;" class="required">*</span></th>
+                                    <th>Quantity <span style="color: red;" class="required">*</span></th>
+                                    <th>Prix <span style="color: red;" class="required">*</span></th>
+                                    <th>Montant <span style="color: red;" class="required">*</span></th>
+
+                                    <th>Action</th>
+                                </thead>
+                                <tbody id="item-produits"> <!-- id="item-inlineformsetname" -->
+                                    <!-- formset non forms errors -->
+                                    {% for error in formset.non_form_errors %}
+                                    <span style="color: red">{{ error }}</span>
+                                    {% endfor %}
+                                    {% for formss in formset %}
+                                    {{ formss.management_form }}
+                                    <tr id="produits-{{ forloop.counter0 }}" class=hide_all>
+                                        <!-- id="inlineformsetname-counter" -->
+                                        {{ formss.id }}
+                                        {% for field in formss.visible_fields %}
+                                        <td>
+                                            {{field}}
+                                            {% for error in field.errors %}
+                                            <span style="color: red">{{ error }}</span>
+                                            {% endfor %}
+
+                                            {% comment %} {{ field.DELETE }} {% endcomment %}
+                                        </td>
+                                        {% endfor %}
+
+                                        {% comment %} for delete {% endcomment %}
+                                        {% if formss.instance.pk %}
+                                        <td>
+                                            <button type="button" id="exampleModal{{formss.instance.pk}}"
+                                                class="btn btn-danger" data-toggle="modal"
+                                                data-target="#exampleModal{{formss.instance.pk}}">
+                                                Supprimer
+                                            </button>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal{{formss.instance.pk}}"
+                                                tabindex="-1" role="dialog"
+                                                aria-labelledby="exampleModalLabel{{formss.instance.pk}}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="exampleModalLabel{{formss.instance.pk}}">
+                                                                voulez vous vraiment supprimer ?</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="{% url 'gstock:delete_produit' formss.instance.pk %}"
+                                                                type="button" class="btn btn-primary">oui, supprimer</a>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Fermer</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', () => {
+                                                    const supprimerLigneCommande = document.getElementById('#exampleModal{{formss.instance.pk}}');
+                                                    const closeButtonSupprimerLigneCommande = document.querySelector('#exampleModal{{formss.instance.pk}} .close');
+                                                    supprimerLigneCommande.addEventListener('click', () => {
+                                                      
+                                                        $('#exampleModal{{formss.instance.pk}}').modal('show');
+                                                    });
+
+                                                    closeButtonSupprimerLigneCommande.addEventListener('click', () => {
+                                                        $('#exampleModal{{formss.instance.pk}}').modal('hide');
+                                                    });
+
+                                                });
+                                            </script>
+                                        </td>
+
+
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <a href="#" id="add-produit-button" class="btn btn-primary add-produits">Autre produit</a>
+                          
+                        </div>
+
+                        {% endwith %}
+
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">Valider</button>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- au clic des bouton ajouter on appelle le modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        //const ajouterCommandeForm = document.getElementById('ajouterCommandeForm');
+        const closeButton = document.querySelector('#ajouterCommandeModal .close');
+
+        // ajouterCommandeForm.addEventListener('click', () => {
+        //     $('#ajouterCommandeModal').modal('show');
+        // });
+
+        closeButton.addEventListener('click', () => {
+            $('#ajouterCommandeModal').modal('hide');
+        });
+
+    });
+
+</script>
+
+
+
+
+
+<!-- ce script ajoute d'autre ligne de formulaire de produit lorsque l'utilisateur clique
+     le bouton autre produit  -->
+<script>
+
+    $(document).ready(function () {
+        // when user clicks add more btn of produits
+        $('.add-produits').click(function (ev) {
+
+            ev.preventDefault();
+            var count = $('#item-produits').children().length;
+            var tmplMarkup = $('#produits-template').html();
+            var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+            $('#item-produits').append(compiledTmpl);
+            console.log($('#item-produits').append(compiledTmpl))
+            // update form count
+            $('#id_produits-TOTAL_FORMS').attr('value', count + 1);
+            console.log(count)
+        });
+    });
+
+
+</script>
+
+
+<script>
+    // Fonction pour déclencher la recherche de commande founisseur
+    $('#champ_recherche').on('input', function () {
+        var termeRecherche = $(this).val();
+
+        // Effectuer une requête AJAX pour récupérer les résultats de la recherche
+        $.ajax({
+            url: '{% url "gstock:recherche_commande_fournisseur" %}',
+            data: { 'term_recherche': termeRecherche },
+            dataType: 'html',
+            success: function (data) {
+                // Mettre à jour le conteneur des résultats avec les nouveaux résultats
+                $('#resultats_recherche').html(data);
+            }
+        });
+    });
+</script>
+
+
+
+
+
+<!-- cet script verifie si une variable afficherModaleCommandeFournisseur es vrai pour declencher 
+l'affichage du modal d'ajout de commande fournisseur ,  cette valeur provient de createCommande depuis la vue-->
+<input type="hidden" id="afficherModaleCommandeFournisseur" value="{{ afficherModaleCommandeFournisseur }}">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var afficherModaleCommandeFournisseur = document.getElementById('afficherModaleCommandeFournisseur').value;
+        var modal = document.getElementById('ajouterCommandeModal');
+        if (afficherModaleCommandeFournisseur && (afficherModaleCommandeFournisseur.toLowerCase() === 'true' || afficherModaleCommandeFournisseur === true)) {
+            // Assurez-vous que Bootstrap est chargé (si vous utilisez Bootstrap)
+            if (typeof $().modal === 'function') {
+                // Utilisez Bootstrap pour afficher le modal
+                $(modal).modal('show');
+
+            } else {
+                // Si Bootstrap n'est pas disponible, vous pouvez simplement afficher le modal
+                modal.style.display = 'block';
+
+            }
+        }
+    });
+
+
+</script>
+
+
+
+{% endblock %}
+
+{% for form in formset.forms %}
+                        <tr>
+                            <td>{{ form.cleaned_data.produit }}</td>
+                            <td>{{ form.cleaned_data.quantite }}</td>
+                            <td> </td>
+                        </tr>
+                    {% endfor %}  
